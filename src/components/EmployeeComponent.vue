@@ -1,6 +1,6 @@
 <template>
-  <div class="col">
-    <q-card class="my-employee-card justify-center">
+  <div class="flex justify-center">
+    <q-card class="my-employee-card justify-center q-mt-md">
       <q-card-section class="q-pa-md q-ma-md row  justify-center items-center">
         <div class="q-ma-md column items-center" flat bordered>
           <q-avatar
@@ -14,7 +14,7 @@
         </div>
     </q-card-section>
     <q-card-section class="q-pa-md q-ma-md row ">
-      <div class="q-ma-md column  items-center" style="width: 250px; height: 250px; background-color: aliceblue; border-radius: 12.5%;">
+      <div class="q-ma-md column  items-center" style="width: 300px; height: 300px; background-color: aliceblue; border-radius: 12.5%;">
         <p class="text-h6 q-mt-md">
             Vacation Days
         </p>
@@ -25,16 +25,101 @@
         </div>
       </div>
 
-      <div class="row justify-center q-ma-md" style="width: 250px; height: 250px;background-color: aliceblue; border-radius: 12.5%;">
-        <p class="text-h6 q-mt-md">
+      <div class="column  q-ma-md" style="width: 300px; height: 300px;background-color: aliceblue; border-radius: 12.5%;">
+        <p class="row text-h6 justify-center q-mt-md q-mb-none row-2">
           My Documents
         </p>
+        <div class="row q-ml-md" style="max-width: 350px">
+          <q-list >
+            <q-item v-for="(item, index) in documents" :key="item.id" clickable v-ripple>
+              <q-item-section>{{index + 1 + '. ' + item.filename }}</q-item-section>
+            </q-item>
+          </q-list>
+        </div>
       </div>
 
-      <div class="row justify-center q-ma-md" style="width: 250px; height: 250px;background-color: aliceblue; border-radius: 12.5%;">
+      <div class="row justify-center q-ma-md" style="width: 300px; height: 300px;background-color: aliceblue; border-radius: 12.5%;">
         <p class="text-h6 q-mt-md">
-          Timsheets
+          Leaves 2025
         </p>
+        <q-list >
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-avatar color="primary" text-color="white">
+                  {{ vacations[0]?.noOfDaysTaken }}
+                </q-avatar>
+              </q-item-section>
+              <q-item-section>Approved Vacation Days</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-avatar color="primary" text-color="white">
+                  {{ vacations[1]?.noOfDaysTaken }}
+                </q-avatar>
+              </q-item-section>
+              <q-item-section>Approved Sick Days</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-avatar color="primary" text-color="white">
+                  {{ vacations[2]?.noOfDaysTaken }}
+                </q-avatar>
+              </q-item-section>
+              <q-item-section>Approved Unpaid Vacation Days</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-avatar color="primary" text-color="white">
+                  {{ vacations[3]?.noOfDaysTaken }}
+                </q-avatar>
+              </q-item-section>
+              <q-item-section>Request waiting for approval</q-item-section>
+            </q-item>
+          </q-list>
+      </div>
+      <div class="column q-ma-md" style="width: 320px; height: 300px;background-color: aliceblue; border-radius: 12.5%;">
+        <p class="row justify-center text-h6 q-mt-md">
+          Apply for Leave
+        </p>
+        <div class="q-mx-lg">
+          <p class="text-subtitle1 q-ma-none">Absence Type</p>
+          <q-select dense standout v-model="absenceType" :options="absenceOptions" />
+          <div class="row q-mt-md justify-between">
+            <div class="column">
+              From
+            <q-input style="width: 130px" dense filled v-model="vacationFromDate" mask="date" :rules="['date']">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                    <q-date v-model="vacationFromDate">
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup label="Close" color="primary" flat />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+            </div>
+            <div class="column">
+              To
+            <q-input style="width: 130px" dense filled v-model="vacationToDate" mask="date" :rules="['date']">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                    <q-date v-model="vacationToDate">
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup label="Close" color="primary" flat />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+          </div>
+        </div>
+        <q-btn class="q-mx-lg self-end" style="width: 60px" color="primary" label="Apply" />
       </div>
       <q-date
               class="q-ma-md"
@@ -43,14 +128,22 @@
               :event-color="(date) => date && (Number(date.charAt(8)) % 2 === 0) ? 'teal' : 'orange'"
             />
       </q-card-section>
-  </q-card>
+     </q-card>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { Employee } from './models';
+import type { Employee, EmployeeDocument, Vacations } from './models';
 
+const vacationFromDate = ref('2025/06/01')
+const vacationToDate = ref('2025/06/01')
+const absenceOptions = [
+  'Paid Leave',
+  'Unpaid Leave',
+  'Sick Leave',
+]
+const absenceType = ref(absenceOptions[0])
 const employee: Employee = {
   id: 1,
   name: 'Divyank Dhadi',
@@ -60,7 +153,39 @@ const employee: Employee = {
 }
 const date = ref('2025/02/01')
 // const events =  [ '2019/02/01', '2019/02/05', '2019/02/06', '2019/02/09', '2019/02/23' ]
+const documents: EmployeeDocument[] = [
+  {
+    id: 1,
+    filename: 'Fulltime Contract'
+  },
+  {
+    id: 2,
+    filename: 'Keys Contract'
+  }
+]
 
+const vacations: Vacations[] = [
+  {
+    id: 1,
+    vacationType: 'Paid',
+    noOfDaysTaken: 12
+  },
+  {
+    id: 2,
+    vacationType: 'UnPaid',
+    noOfDaysTaken: 0
+  },
+  {
+    id: 3,
+    vacationType: 'Sick',
+    noOfDaysTaken: 2
+  },
+  {
+    id: 4,
+    vacationType: 'pending',
+    noOfDaysTaken: 1
+  }
+]
 function eventsFn (date: string) {
         if (date === '2025/02/01' ||
           date === '2025/02/05' ||
@@ -80,6 +205,7 @@ function eventsFn (date: string) {
 
 .my-employee-card
   width: 100%
-  max-width: 1800px
+  max-width: 100%
   height: 90%
+  max-height: 100%
 </style>

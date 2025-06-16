@@ -1,7 +1,7 @@
 <template>
   <q-page class="row q-ma-md">
     <employee-component
-      title="Example component"
+      title="Employee component"
       active
       :todos="todos"
       :meta="meta"

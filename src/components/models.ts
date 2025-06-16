@@ -14,3 +14,14 @@ export interface Employee {
   year: number;
   role: string
 }
+
+export interface EmployeeDocument {
+  id: number;
+  filename: string;
+}
+
+export interface Vacations {
+  id: number;
+  vacationType: string;
+  noOfDaysTaken: number;
+}
