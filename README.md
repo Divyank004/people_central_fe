@@ -38,3 +38,9 @@ quasar build
 
 ### Customize the configuration
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+
+### Build docker image
+docker build -t people-central-fe .
+
+### RUN Docker container
+docker run -it -p 8080:80 --rm --name people-central-fe-container people-central-fe
