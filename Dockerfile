@@ -1,8 +1,11 @@
-# build stage
-FROM node:lts-alpine AS build-stage 
+# develop stage
+FROM node:lts-alpine AS develop-stage
 WORKDIR /app
 COPY . /app
 RUN yarn
+
+# build stage
+FROM develop-stage AS build-stage 
 RUN npm run build
 
 # production stage

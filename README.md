@@ -42,5 +42,8 @@ See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-
 ### Build docker image
 docker build -t people-central-fe .
 
-### RUN Docker container
+### RUN Docker container in Dev mode
+docker-compose up --build
+
+### RUN Docker container in production
 docker run -it -p 8080:80 --rm --name people-central-fe-container people-central-fe
