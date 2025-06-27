@@ -2,7 +2,7 @@ import type { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '/username',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/IndexPage.vue') },
       { path: '/absences', component: () => import('pages/AbsencesPage.vue') },
@@ -10,7 +10,10 @@ const routes: RouteRecordRaw[] = [
       { path: '/tasks', component: () => import('pages/TaskPage.vue') }
     ],
   },
-
+  {
+    path: '/',
+      component: () => import('layouts/LoginLayout.vue'),
+  },
   // Always leave this as last one,
   // but you can also remove it
   {
