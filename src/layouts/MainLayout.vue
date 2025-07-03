@@ -7,7 +7,7 @@
           People Central
         </q-toolbar-title>
         <q-tabs>
-          <q-route-tab to="/" label="Home" />
+          <q-route-tab to="/username" label="Home" />
           <q-route-tab to="/absences" label="Absences" />
           <q-route-tab to="/team" label="My Team" />
           <q-route-tab to="/tasks" label="Tasks" />

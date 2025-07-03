@@ -63,6 +63,11 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
+import { authService } from '../api/services'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 interface LoginForm {
   email: string
   password: string
@@ -81,14 +86,14 @@ async function handleLogin(): Promise<void>  {
     alert('Please fill in all fields');
     return;
   }
-
   isLoading.value = true;
 
   try {
-    console.log('Login attempt:', form);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    alert('Login functionality to be implemented');
+    await authService.login({
+      username: form.email,
+      password: form.password
+    })
+    await router.push('/username')
   } catch (error) {
     console.error('Login error:', error);
     alert('Login failed. Please try again.');
