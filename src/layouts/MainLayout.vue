@@ -14,7 +14,7 @@
         </q-tabs>
         <q-tabs class="absolute-right">
           <q-tab name="help" icon="help" />
-          <q-tab name="help" icon="logout" />
+          <q-route-tab to="/" icon="logout" @click='logout'/>
         </q-tabs>
 
       </q-toolbar>
@@ -34,5 +34,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 const appVersion = ref(process.env.APP_VERSION);
-
+function logout() {
+   localStorage.removeItem('token')
+   localStorage.removeItem('user')
+}
 </script>
