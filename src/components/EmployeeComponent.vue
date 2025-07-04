@@ -1,92 +1,105 @@
 <template>
-  <div class="flex justify-center">
-    <q-card class="my-employee-card justify-center q-mt-md">
-      <q-card-section class="q-pa-md q-ma-md row  justify-center items-center">
-        <div class="q-ma-md column items-center" flat bordered>
+  <div class="column items-center">
+        <div class="column items-center">
           <q-avatar
           size="100px"
           class="overlapping"
           >
           <img :src="`https://cdn.quasar.dev/img/avatar1.jpg`">
           </q-avatar>
-          <p class="text-h6 text-center q-ma-none">{{ employee.name }}</p>
-          <p class="text-subtitle1 text-center">{{ employee.role }}</p>
+          <p class="profile-name q-ma-none">{{ employee.name }}</p>
+          <p class="profile-title text-center q-mt-none ">{{ employee.role }}</p>
         </div>
-    </q-card-section>
-    <q-card-section class="q-pa-md q-ma-md row ">
-      <div class="q-ma-md column  items-center" style="width: 300px; height: 300px; background-color: aliceblue; border-radius: 12.5%;">
-        <p class="text-h6 q-mt-md">
-            Vacation Days
-        </p>
-        <div class="q-mt-md  row justify-center items-center" style="width: 140px; height: 140px; border-radius: 50%;background: #4563;">
-          <p class="text-h6">
-            {{ employee.vacations }}
+
+        <div class="row">
+      <div class="dashboard-card q-ma-md column" style="width: 350px; height: 350px;">
+        <div class="card-header">
+          <p class="card-title">
+              Vacation Days
           </p>
+          <div class="card-icon">📅</div>
         </div>
+        <div class="vacation-circle">
+          {{ employee.vacations }}
+        </div>
+          <p style="text-align: center; color: #666;">
+            Available Days
+          </p>
       </div>
 
-      <div class="column  q-ma-md" style="width: 300px; height: 300px;background-color: aliceblue; border-radius: 12.5%;">
-        <p class="row text-h6 justify-center q-mt-md q-mb-none row-2">
-          My Documents
-        </p>
-        <div class="row q-ml-md" style="max-width: 350px">
-          <q-list >
+      <div class="dashboard-card column  q-ma-md" style="width: 350px; height: 350px;">
+       <div class="row justify-between">
+          <p class="card-title">
+            My Documents
+          </p>
+          <div class="card-icon">📄</div>
+        </div>
+        <div class="row">
+          <q-list :separator="true">
             <q-item v-for="(item, index) in documents" :key="item.id" clickable v-ripple>
-              <q-item-section>{{index + 1 + '. ' + item.filename }}</q-item-section>
+              <q-item-section >{{index + 1 + '. ' + item.filename }}</q-item-section>
             </q-item>
           </q-list>
         </div>
       </div>
 
-      <div class="row justify-center q-ma-md" style="width: 300px; height: 300px;background-color: aliceblue; border-radius: 12.5%;">
-        <p class="text-h6 q-mt-md">
-          Leaves 2025
-        </p>
-        <q-list >
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-avatar color="primary" text-color="white">
-                  {{ vacations[0]?.noOfDaysTaken }}
-                </q-avatar>
-              </q-item-section>
-              <q-item-section>Approved Vacation Days</q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-avatar color="primary" text-color="white">
-                  {{ vacations[1]?.noOfDaysTaken }}
-                </q-avatar>
-              </q-item-section>
-              <q-item-section>Approved Sick Days</q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-avatar color="primary" text-color="white">
-                  {{ vacations[2]?.noOfDaysTaken }}
-                </q-avatar>
-              </q-item-section>
-              <q-item-section>Approved Unpaid Vacation Days</q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-avatar color="primary" text-color="white">
-                  {{ vacations[3]?.noOfDaysTaken }}
-                </q-avatar>
-              </q-item-section>
-              <q-item-section>Request waiting for approval</q-item-section>
-            </q-item>
-          </q-list>
+      <div class="dashboard-card rows q-ma-md" style="width: 350px; height: 350px;">
+        <div class="row justify-between">
+          <p class="card-title">
+            Leaves 2025
+          </p>
+          <div class="card-icon">🏖️</div>
+        </div>
+         <div class="row">
+          <q-list >
+              <q-item clickable v-ripple>
+                <q-item-section avatar>
+                  <q-avatar class='leave-badge approved'>
+                    {{ vacations[0]?.noOfDaysTaken }}
+                  </q-avatar>
+                </q-item-section>
+                <q-item-section >Approved Vacation Days</q-item-section>
+              </q-item>
+              <q-item clickable v-ripple>
+                <q-item-section avatar>
+                  <q-avatar class='leave-badge approved'>
+                    {{ vacations[1]?.noOfDaysTaken }}
+                  </q-avatar>
+                </q-item-section>
+                <q-item-section>Approved Sick Days</q-item-section>
+              </q-item>
+              <q-item clickable v-ripple>
+                <q-item-section avatar>
+                  <q-avatar class='leave-badge unpaid'>
+                    {{ vacations[2]?.noOfDaysTaken }}
+                  </q-avatar>
+                </q-item-section>
+                <q-item-section>Approved Unpaid Vacation Days</q-item-section>
+              </q-item>
+              <q-item clickable v-ripple>
+                <q-item-section avatar>
+                  <q-avatar class='leave-badge pending'>
+                    {{ vacations[3]?.noOfDaysTaken }}
+                  </q-avatar>
+                </q-item-section>
+                <q-item-section>Request waiting for approval</q-item-section>
+              </q-item>
+            </q-list>
+        </div>
       </div>
-      <div class="column q-ma-md" style="width: 320px; height: 300px;background-color: aliceblue; border-radius: 12.5%;">
-        <p class="row justify-center text-h6 q-mt-md">
-          Apply for Leave
-        </p>
-        <div class="q-mx-lg">
-          <p class="text-subtitle1 q-ma-none">Absence Type</p>
-          <q-select dense standout v-model="absenceType" :options="absenceOptions" />
+      <div class="dashboard-card rows q-ma-md" style="width: 350px; height: 350px;">
+        <div class="row justify-between">
+          <p class="card-title">
+            Apply for Leave
+          </p>
+         <div class="card-icon">✉️</div>
+        </div>
+         <div class="q-mt-md">
+          <p class="form-label">Absence Type</p>
+          <q-select class="" dense standout v-model="absenceType" :options="absenceOptions" />
           <div class="row q-mt-md justify-between">
             <div class="column">
-              From
+              <p class="form-label">From</p>
             <q-input style="width: 130px" dense filled v-model="vacationFromDate" mask="date" :rules="['date']">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
@@ -102,7 +115,7 @@
             </q-input>
             </div>
             <div class="column">
-              To
+              <p class="form-label">To</p>
             <q-input style="width: 130px" dense filled v-model="vacationToDate" mask="date" :rules="['date']">
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
@@ -119,16 +132,17 @@
           </div>
           </div>
         </div>
-        <q-btn class="q-mx-lg self-end" style="width: 60px" color="primary" label="Apply" />
+        <q-btn class="apply-btn" label="Apply" />
       </div>
       <q-date
-              class="q-ma-md"
-              v-model="date"
-              :events="eventsFn"
-              :event-color="(date) => date && (Number(date.charAt(8)) % 2 === 0) ? 'teal' : 'orange'"
-            />
-      </q-card-section>
-     </q-card>
+        style="width: 350px; height: 350px;"
+        color="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+        class="dashboard-card calendar q-ma-md"
+        v-model="date"
+        :events="eventsFn"
+        :event-color="(date) => date && (Number(date.charAt(8)) % 2 === 0) ? 'teal' : 'orange'"
+      />
+    </div>
   </div>
 </template>
 
@@ -197,15 +211,141 @@ function eventsFn (date: string) {
         return false
       }
 </script>
-<style lang="sass" scoped>
-.my-card
-  width: 100%
-  max-width: 200px
-  height: 100px
+<style scoped>
+.my-card {
+  width: 100%;
+  max-width: 200px;
+  height: 100px;
+}
 
-.my-employee-card
-  width: 100%
-  max-width: 100%
-  height: 90%
-  max-height: 100%
+
+.my-employee-card {
+  width: 100%;
+  max-width: 100%;
+  height: 90%;
+  max-height: 100%;
+}
+
+
+.profile-name {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+}
+
+.profile-title {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dashboard-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.dashboard-card.calendar {
+  padding: 0rem;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.vacation-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.leave-badge {
+  font-weight: bold;
+  color: white;
+}
+
+.leave-badge.approved {
+    background: #28a745;
+}
+
+.leave-badge.pending {
+    background: #ffc107;
+    color: #333;
+}
+
+.leave-badge.unpaid {
+    background: #17a2b8;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-select {
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.apply-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.apply-btn:hover {
+  transform: translateY(-2px);
+}
 </style>

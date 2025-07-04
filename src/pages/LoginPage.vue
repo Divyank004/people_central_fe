@@ -42,7 +42,10 @@
           >
         </div>
 
-        <div class="forgot-password">
+        <div class="row justify-between forgot-password">
+          <div v-if='loginFailed' class="invalid-credentials">
+          <p>Invalid Credentials</p>
+        </div>
           <a href="#" @click.prevent="handleForgotPassword">Forgot Password?</a>
         </div>
 
@@ -72,7 +75,7 @@ interface LoginForm {
   email: string
   password: string
 }
-
+let loginFailed: boolean = false
 const form = reactive<LoginForm>({
   email: '',
   password: ''
@@ -82,12 +85,12 @@ const emailFocused = ref<boolean>(false);
 const passwordFocused = ref<boolean>(false);
 
 async function handleLogin(): Promise<void>  {
+  loginFailed = false
   if (!form.email || !form.password) {
     alert('Please fill in all fields');
     return;
   }
   isLoading.value = true;
-
   try {
     await authService.login({
       username: form.email,
@@ -95,8 +98,8 @@ async function handleLogin(): Promise<void>  {
     })
     await router.push('/username')
   } catch (error) {
+    loginFailed = true
     console.error('Login error:', error);
-    alert('Login failed. Please try again.');
   } finally {
     isLoading.value = false;
   }
@@ -375,6 +378,9 @@ function handleSignup(): void {
   animation-delay: 4s;
 }
 
+.invalid-credentials {
+  color: #DC2525;
+}
 
 @keyframes float {
   0%, 100% {
