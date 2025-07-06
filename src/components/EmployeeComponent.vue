@@ -1,5 +1,5 @@
 <template>
-  <div class="column items-center">
+    <div class="absolute-center" style="height:100%;width:90%">
         <div class="column items-center">
           <q-avatar
           size="100px"
@@ -11,144 +11,144 @@
           <p class="profile-title text-center q-mt-none ">{{ employee.role }}</p>
         </div>
 
-        <div class="row">
-      <div class="dashboard-card q-ma-md column" style="width: 350px; height: 350px;">
-        <div class="card-header">
-          <p class="card-title">
-              Vacation Days
-          </p>
-          <div class="card-icon">📅</div>
-        </div>
-        <div class="vacation-circle">
-          {{ employee.vacations }}
-        </div>
-          <p style="text-align: center; color: #666;">
-            Available Days
-          </p>
-      </div>
-
-      <div class="dashboard-card column  q-ma-md" style="width: 350px; height: 350px;">
-       <div class="row justify-between">
-          <p class="card-title">
-            My Documents
-          </p>
-          <div class="card-icon">📄</div>
-        </div>
-        <div class="row">
-          <q-list :separator="true">
-            <q-item v-for="(item, index) in documents" :key="item.id" clickable v-ripple>
-              <q-item-section >{{index + 1 + '. ' + item.filename }}</q-item-section>
-            </q-item>
-          </q-list>
-        </div>
-      </div>
-
-      <div class="dashboard-card rows q-ma-md" style="width: 350px; height: 350px;">
-        <div class="row justify-between">
-          <p class="card-title">
-            Leaves 2025
-          </p>
-          <div class="card-icon">🏖️</div>
-        </div>
-         <div class="row">
-          <q-list >
-              <q-item clickable v-ripple>
-                <q-item-section avatar>
-                  <q-avatar class='leave-badge approved'>
-                    {{ vacations[0]?.noOfDaysTaken }}
-                  </q-avatar>
-                </q-item-section>
-                <q-item-section >Approved Vacation Days</q-item-section>
-              </q-item>
-              <q-item clickable v-ripple>
-                <q-item-section avatar>
-                  <q-avatar class='leave-badge approved'>
-                    {{ vacations[1]?.noOfDaysTaken }}
-                  </q-avatar>
-                </q-item-section>
-                <q-item-section>Approved Sick Days</q-item-section>
-              </q-item>
-              <q-item clickable v-ripple>
-                <q-item-section avatar>
-                  <q-avatar class='leave-badge unpaid'>
-                    {{ vacations[2]?.noOfDaysTaken }}
-                  </q-avatar>
-                </q-item-section>
-                <q-item-section>Approved Unpaid Vacation Days</q-item-section>
-              </q-item>
-              <q-item clickable v-ripple>
-                <q-item-section avatar>
-                  <q-avatar class='leave-badge pending'>
-                    {{ vacations[3]?.noOfDaysTaken }}
-                  </q-avatar>
-                </q-item-section>
-                <q-item-section>Request waiting for approval</q-item-section>
-              </q-item>
-            </q-list>
-        </div>
-      </div>
-      <div class="dashboard-card rows q-ma-md" style="width: 350px; height: 350px;">
-        <div class="row justify-between">
-          <p class="card-title">
-            Apply for Leave
-          </p>
-         <div class="card-icon">✉️</div>
-        </div>
-         <div class="q-mt-md">
-          <p class="form-label">Absence Type</p>
-          <q-select class="" dense standout v-model="absenceType" :options="absenceOptions" />
-          <div class="row q-mt-md justify-between">
-            <div class="column">
-              <p class="form-label">From</p>
-            <q-input style="width: 130px" dense filled v-model="vacationFromDate" mask="date" :rules="['date']">
-              <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                    <q-date v-model="vacationFromDate">
-                      <div class="row items-center justify-end">
-                        <q-btn v-close-popup label="Close" color="primary" flat />
-                      </div>
-                    </q-date>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
+        <div class="row justify-center ">
+          <div class="dashboard-card q-ma-md column" style="width: 350px; height: 350px;">
+            <div class="card-header">
+              <p class="card-title">
+                  Vacation Days
+              </p>
+              <div class="card-icon">📅</div>
             </div>
-            <div class="column">
-              <p class="form-label">To</p>
-            <q-input style="width: 130px" dense filled v-model="vacationToDate" mask="date" :rules="['date']">
-              <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                    <q-date v-model="vacationToDate">
-                      <div class="row items-center justify-end">
-                        <q-btn v-close-popup label="Close" color="primary" flat />
-                      </div>
-                    </q-date>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
+            <div class="vacation-circle">
+              {{ employee.vacations }}
+            </div>
+              <p style="text-align: center; color: #666;">
+                Available Days
+              </p>
           </div>
+
+          <div class="dashboard-card column  q-ma-md" style="width: 350px; height: 350px;">
+          <div class="row justify-between">
+              <p class="card-title">
+                My Documents
+              </p>
+              <div class="card-icon">📄</div>
+            </div>
+            <div class="row">
+              <q-list :separator="true">
+                <q-item v-for="(item, index) in documents" :key="item.id" clickable v-ripple>
+                  <q-item-section >{{index + 1 + '. ' + item.filename }}</q-item-section>
+                </q-item>
+              </q-list>
+            </div>
           </div>
-        </div>
-        <q-btn class="apply-btn" label="Apply" />
-      </div>
-      <q-date
+
+          <div class="dashboard-card rows q-ma-md" style="width: 350px; height: 350px;">
+            <div class="row justify-between">
+              <p class="card-title">
+                Leaves 2025
+              </p>
+              <div class="card-icon">🏖️</div>
+            </div>
+            <div class="row">
+              <q-list >
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <q-avatar class='leave-badge approved'>
+                        {{ vacations[0]?.noOfDaysTaken }}
+                      </q-avatar>
+                    </q-item-section>
+                    <q-item-section >Approved Vacation Days</q-item-section>
+                  </q-item>
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <q-avatar class='leave-badge approved'>
+                        {{ vacations[1]?.noOfDaysTaken }}
+                      </q-avatar>
+                    </q-item-section>
+                    <q-item-section>Approved Sick Days</q-item-section>
+                  </q-item>
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <q-avatar class='leave-badge unpaid'>
+                        {{ vacations[2]?.noOfDaysTaken }}
+                      </q-avatar>
+                    </q-item-section>
+                    <q-item-section>Approved Unpaid Vacation Days</q-item-section>
+                  </q-item>
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <q-avatar class='leave-badge pending'>
+                        {{ vacations[3]?.noOfDaysTaken }}
+                      </q-avatar>
+                    </q-item-section>
+                    <q-item-section>Request waiting for approval</q-item-section>
+                  </q-item>
+                </q-list>
+            </div>
+          </div>
+          <div class="dashboard-card rows q-ma-md" style="width: 350px; height: 350px;">
+            <div class="row justify-between">
+              <p class="card-title">
+                Apply for Leave
+              </p>
+            <div class="card-icon">✉️</div>
+            </div>
+            <div class="q-mt-md">
+              <p class="form-label">Absence Type</p>
+              <q-select class="" dense standout v-model="absenceType" :options="absenceOptions" />
+              <div class="row q-mt-md justify-between">
+                <div class="column">
+                  <p class="form-label">From</p>
+                <q-input style="width: 130px" dense filled v-model="vacationFromDate" mask="date" :rules="['date']">
+                  <template v-slot:append>
+                    <q-icon name="event" class="cursor-pointer">
+                      <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                        <q-date v-model="vacationFromDate">
+                          <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Close" color="primary" flat />
+                          </div>
+                        </q-date>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
+                </div>
+                <div class="column">
+                  <p class="form-label">To</p>
+                <q-input style="width: 130px" dense filled v-model="vacationToDate" mask="date" :rules="['date']">
+                  <template v-slot:append>
+                    <q-icon name="event" class="cursor-pointer">
+                      <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                        <q-date v-model="vacationToDate">
+                          <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Close" color="primary" flat />
+                          </div>
+                        </q-date>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
+              </div>
+              </div>
+            </div>
+            <q-btn class="apply-btn" label="Apply" />
+          </div>
+      <!-- <q-date
         style="width: 350px; height: 350px;"
         color="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
         class="dashboard-card calendar q-ma-md"
         v-model="date"
         :events="eventsFn"
         :event-color="(date) => date && (Number(date.charAt(8)) % 2 === 0) ? 'teal' : 'orange'"
-      />
+      /> -->
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { Employee, EmployeeDocument, Vacations } from './models';
+import type { Employee, EmployeeDocument, Vacations } from '../types/employeeDashboard';
 
 const vacationFromDate = ref('2025/06/01')
 const vacationToDate = ref('2025/06/01')
@@ -165,7 +165,7 @@ const employee: Employee = {
   year: 2025,
   vacations: 10
 }
-const date = ref('2025/02/01')
+// const date = ref('2025/02/01')
 // const events =  [ '2019/02/01', '2019/02/05', '2019/02/06', '2019/02/09', '2019/02/23' ]
 const documents: EmployeeDocument[] = [
   {
@@ -200,16 +200,16 @@ const vacations: Vacations[] = [
     noOfDaysTaken: 1
   }
 ]
-function eventsFn (date: string) {
-        if (date === '2025/02/01' ||
-          date === '2025/02/05' ||
-          date === '2025/02/06' ||
-          date === '2025/02/09' ||
-          date === '2025/02/23') {
-          return true
-        }
-        return false
-      }
+// function eventsFn (date: string) {
+//         if (date === '2025/02/01' ||
+//           date === '2025/02/05' ||
+//           date === '2025/02/06' ||
+//           date === '2025/02/09' ||
+//           date === '2025/02/23') {
+//           return true
+//         }
+//         return false
+//       }
 </script>
 <style scoped>
 .my-card {
