@@ -1,16 +1,5 @@
 <template>
     <div>
-        <div class="column items-center">
-          <q-avatar
-          size="100px"
-          class="overlapping"
-          >
-            <img :src="`https://cdn.quasar.dev/img/avatar1.jpg`">
-          </q-avatar>
-          <p class="profile-name q-ma-none">{{ employee.name }}</p>
-          <p class="profile-title text-center q-mt-none ">{{ employee.role }}</p>
-        </div>
-
         <div class="row justify-center ">
           <div class="dashboard-card q-ma-md column" style="width: 350px; height: 350px;">
             <div class="card-header">
@@ -26,23 +15,6 @@
                 Available Days
               </p>
           </div>
-
-          <div class="dashboard-card column  q-ma-md" style="width: 350px; height: 350px;">
-          <div class="row justify-between">
-              <p class="card-title">
-                My Documents
-              </p>
-              <div class="card-icon">📄</div>
-            </div>
-            <div class="row">
-              <q-list :separator="true">
-                <q-item v-for="(item, index) in documents" :key="item.id" clickable v-ripple>
-                  <q-item-section >{{index + 1 + '. ' + item.filename }}</q-item-section>
-                </q-item>
-              </q-list>
-            </div>
-          </div>
-
           <div class="dashboard-card rows q-ma-md" style="width: 350px; height: 350px;">
             <div class="row justify-between">
               <p class="card-title">
@@ -133,6 +105,21 @@
               </div>
             </div>
             <q-btn class="apply-btn" label="Apply" />
+          </div>
+            <div class="dashboard-card column  q-ma-md" style="width: 350px; height: 350px;">
+          <div class="row justify-between">
+              <p class="card-title">
+                My Documents
+              </p>
+              <div class="card-icon">📄</div>
+            </div>
+            <div class="row">
+              <q-list :separator="true">
+                <q-item v-for="(item, index) in documents" :key="item.id" clickable v-ripple>
+                  <q-item-section >{{index + 1 + '. ' + item.filename }}</q-item-section>
+                </q-item>
+              </q-list>
+            </div>
           </div>
       <!-- <q-date
         style="width: 350px; height: 350px;"

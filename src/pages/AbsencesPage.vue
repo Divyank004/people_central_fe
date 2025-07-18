@@ -17,9 +17,51 @@
 
           </div>
       </q-scroll-area>
-      <button class="apply-button" onclick="openApplicationForm()">
+      <button class="apply-button" @click="showLeaveModal = true">
                 Apply for Leave
       </button>
+    </div>
+       <!-- Leave Application Modal -->
+    <div v-if="showLeaveModal" class="leave-modal" @click.self="showLeaveModal = false">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Request for Leave</h2>
+                <button class="close-btn" @click="showLeaveModal = false">&times;</button>
+            </div>
+
+            <form @submit.prevent="submitLeaveRequest">
+                <div class="form-group">
+                    <label class="form-label">Leave Type</label>
+                    <select v-model="leaveForm.type" class="form-select" required>
+                        <option value="">Select leave type</option>
+                        <option value="vacation">Vacation</option>
+                        <option value="sick">Sick Leave</option>
+                        <option value="personal">Personal Leave</option>
+                        <option value="emergency">Emergency Leave</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Start Date</label>
+                    <input v-model="leaveForm.startDate" type="date" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">End Date</label>
+                    <input v-model="leaveForm.endDate" type="date" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Reason (Optional)</label>
+                    <textarea v-model="leaveForm.reason" class="form-textarea" placeholder="Enter reason for leave..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" @click="showLeaveModal = false">Cancel</button>
+                    <button type="submit" class="btn-primary">Submit Request</button>
+                </div>
+            </form>
+        </div>
     </div>
   </q-page>
 </template>
@@ -27,6 +69,9 @@
 <script setup lang="ts">
 import AbsenceCard from 'src/components/AbsenceCard.vue'
 import type { absenceType } from '../types/absence'
+import { ref } from 'vue';
+
+const showLeaveModal = ref(false);
 
 const absences: absenceType[] = [
 {
@@ -66,6 +111,27 @@ const absences: absenceType[] = [
     status: 'Approved',
   },
 ]
+
+  const leaveForm = ref({
+      type: '',
+      startDate: '',
+      endDate: '',
+      reason: ''
+  });
+ const submitLeaveRequest = () => {
+      if (!leaveForm.value.type || !leaveForm.value.startDate || !leaveForm.value.endDate) {
+          alert('Please fill in all required fields');
+          return;
+      }
+
+      // Here you would typically send the request to your backend
+      console.log('Leave request submitted:', leaveForm.value);
+      alert('Leave request submitted successfully!');
+
+      // Reset form and close modal
+      leaveForm.value = { type: '', startDate: '', endDate: '', reason: '' };
+      showLeaveModal.value = false;
+  };
 </script>
 
 <style scoped>
@@ -154,6 +220,98 @@ const absences: absenceType[] = [
             opacity: 0.5;
         }
 
+        .leave-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 0.7rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
         @media (max-width: 768px) {
             .nav-menu {
                 display: none;

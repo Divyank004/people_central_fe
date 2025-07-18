@@ -2,18 +2,11 @@
   <q-page class="column items-center ">
         <div class="row q-gutter-md">
             <div class="team-card" style="width: 1000px; height: 500px;">
-                <div class="section-title">
-                    <span class="section-icon">📅</span>
-                    Team Calendar
-                </div>
-
                 <div class="calendar-header">
                     <div class="month-navigation">
-                        <button class="nav-button" @click="changeMonth(-1)">
-
-                        </button>
+                          <button class="nav-button" @click="changeMonth(-1)">‹</button>
                         <div class="current-month" id="currentMonth">July 2025</div>
-                        <button class="nav-button" @click="changeMonth(1)">></button>
+                        <button class="nav-button" @click="changeMonth(1)">›</button>
                     </div>
 
                     <div class="legend">
@@ -35,13 +28,10 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="calendar-timeline" id="calendarTimeline">
-                    <!-- Calendar will be generated here -->
+                    <!-- Calendar generated here -->
                 </div>
             </div>
-
-
         </div>
   </q-page>
 </template>
@@ -50,138 +40,135 @@
 import {onMounted} from 'vue';
 
 onMounted(()=>{
-        renderCalendar();
-    });
-// Team data
-        const teamMembers = [
-            {
-                name: "Sarah Mitchell",
-                role: "Engineering Manager",
-                avatar: "SM",
-                vacations: [],
-                holidays: [4]
-            },
-            {
-                name: "Michael Johnson",
-                role: "Senior Lead",
-                avatar: "MJ",
-                vacations: [],
-                holidays: [4]
-            },
-            {
-                name: "Lisa Chen",
-                role: "Frontend Lead",
-                avatar: "LC",
-                vacations: [5, 6, 7, 8],
-                holidays: [4]
-            },
-            {
-                name: "Divyank Dhadi",
-                role: "Full Stack Dev",
-                avatar: "DD",
-                vacations: [15, 16, 17, 18, 19],
-                holidays: [4]
-            }
-        ];
+  renderCalendar();
+});
 
-        const months = [
-            'January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'
-        ];
+  const teamMembers = [
+      {
+          name: "Sarah Mitchell",
+          role: "Engineering Manager",
+          avatar: "SM",
+          vacations: [],
+          holidays: [4]
+      },
+      {
+          name: "Michael Johnson",
+          role: "Senior Lead",
+          avatar: "MJ",
+          vacations: [],
+          holidays: [4]
+      },
+      {
+          name: "Lisa Chen",
+          role: "Frontend Lead",
+          avatar: "LC",
+          vacations: [5, 6, 7, 8],
+          holidays: [4]
+      },
+      {
+          name: "Divyank Dhadi",
+          role: "Full Stack Dev",
+          avatar: "DD",
+          vacations: [15, 16, 17, 18, 19],
+          holidays: [4]
+      }
+  ];
 
-        const currentDate = new Date(2025, 6, 18); // July 18, 2025
-        let displayMonth = 6; // July (0-indexed)
-        let displayYear = 2025;
+  const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+  ];
 
-        function getDaysInMonth(month: number, year: number) {
-            return new Date(year, month + 1, 0).getDate();
-        }
+  const currentDate = new Date(2025, 6, 18); // July 18, 2025
+  let displayMonth = 6; // July (0-indexed)
+  let displayYear = 2025;
 
-        function isWeekend(day:number, month: number, year: number) {
-            const date = new Date(year, month, day);
-            const dayOfWeek = date.getDay();
-            return dayOfWeek === 0 || dayOfWeek === 6; // Sunday = 0, Saturday = 6
-        }
-        function renderCalendar() {
-            const timeline = document.getElementById('calendarTimeline');
-            const monthElement = document.getElementById('currentMonth');
-            if (monthElement) {
-                monthElement.textContent = `${months[displayMonth]} ${displayYear}`;
-            }
+  function getDaysInMonth(month: number, year: number) {
+      return new Date(year, month + 1, 0).getDate();
+  }
 
-            const daysInMonth = getDaysInMonth(displayMonth, displayYear);
-            let html = '';
+  function isWeekend(day:number, month: number, year: number) {
+      const date = new Date(year, month, day);
+      const dayOfWeek = date.getDay();
+      return dayOfWeek === 0 || dayOfWeek === 6; // Sunday = 0, Saturday = 6
+  }
+  function renderCalendar() {
+      const timeline = document.getElementById('calendarTimeline');
+      const monthElement = document.getElementById('currentMonth');
+      if (monthElement) {
+          monthElement.textContent = `${months[displayMonth]} ${displayYear}`;
+      }
 
-            teamMembers.forEach(member => {
-                html += `
-                    <div class="timeline-member">
-                        <div class="member-info">
-                            <div class="member-avatar">${member.avatar}</div>
-                            <div class="member-details">
-                                <div class="member-name">${member.name}</div>
-                                <div class="member-role">${member.role}</div>
-                            </div>
-                        </div>
-                        <div class="calendar-days">
-                `;
+      const daysInMonth = getDaysInMonth(displayMonth, displayYear);
+      let html = '';
 
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const classes = ['day-cell'];
+      teamMembers.forEach(member => {
+          html += `
+              <div class="timeline-member">
+                  <div class="member-info">
+                      <div class="member-avatar">${member.avatar}</div>
+                      <div class="member-details">
+                          <div class="member-name">${member.name}</div>
+                          <div class="member-role">${member.role}</div>
+                      </div>
+                  </div>
+                  <div class="calendar-days">
+          `;
 
-                    // Check if it's today
-                    if (day === currentDate.getDate() &&
-                        displayMonth === currentDate.getMonth() &&
-                        displayYear === currentDate.getFullYear()) {
-                        classes.push('today');
-                    }
-                    // Check if it's a weekend
-                    else if (isWeekend(day, displayMonth, displayYear)) {
-                        classes.push('weekend');
-                    }
-                    // Check if it's a holiday
-                    else if (member.holidays.includes(day)) {
-                        classes.push('holiday');
-                    }
-                    // Check if it's a vacation day
-                    else if (member.vacations.includes(day)) {
-                        classes.push('vacation');
-                    }
+          for (let day = 1; day <= daysInMonth; day++) {
+              const classes = ['day-cell'];
 
-                    html += `<div class="${classes.join(' ')}">${day}</div>`;
-                }
+              // Check if it's today
+              if (day === currentDate.getDate() &&
+                  displayMonth === currentDate.getMonth() &&
+                  displayYear === currentDate.getFullYear()) {
+                  classes.push('today');
+              }
+              // Check if it's a weekend
+              else if (isWeekend(day, displayMonth, displayYear)) {
+                  classes.push('weekend');
+              }
+              // Check if it's a holiday
+              else if (member.holidays.includes(day)) {
+                  classes.push('holiday');
+              }
+              // Check if it's a vacation day
+              else if (member.vacations.includes(day)) {
+                  classes.push('vacation');
+              }
 
-                // Fill remaining cells if needed
-                const remainingCells = 31 - daysInMonth;
-                for (let i = 0; i < remainingCells; i++) {
-                    html += `<div class="day-cell inactive"></div>`;
-                }
+              html += `<div class="${classes.join(' ')}">${day}</div>`;
+          }
 
-                html += `
-                        </div>
-                    </div>
-                `;
-            });
-            if (timeline) {
-                timeline.innerHTML = html;
-            }
-        }
+          // Fill remaining cells if needed
+          const remainingCells = 31 - daysInMonth;
+          for (let i = 0; i < remainingCells; i++) {
+              html += `<div class="day-cell inactive"></div>`;
+          }
 
-        function changeMonth(direction: number) {
-            displayMonth += direction;
+          html += `
+                  </div>
+              </div>
+          `;
+      });
+      if (timeline) {
+          timeline.innerHTML = html;
+      }
+  }
 
-            if (displayMonth > 11) {
-                displayMonth = 0;
-                displayYear++;
-            } else if (displayMonth < 0) {
-                displayMonth = 11;
-                displayYear--;
-            }
+  function changeMonth(direction: number) {
+      displayMonth += direction;
 
-            renderCalendar();
-        }
+      if (displayMonth > 11) {
+          displayMonth = 0;
+          displayYear++;
+      } else if (displayMonth < 0) {
+          displayMonth = 11;
+          displayYear--;
+      }
 
-        // Initialize calendar
-        renderCalendar();
+      renderCalendar();
+  }
 </script>
 <style>
         * {
@@ -210,12 +197,6 @@ onMounted(()=>{
             align-items: center;
             max-width: 1400px;
             margin: 0 auto;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
         }
 
         .nav-menu {
@@ -252,16 +233,6 @@ onMounted(()=>{
             margin-bottom: 3rem;
         }
 
-        .page-title {
-            font-size: 2.5rem;
-            color: white;
-            margin-bottom: 0.5rem;
-        }
-
-        .page-subtitle {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
 
         .team-card {
             background: rgba(255, 255, 255, 0.95);

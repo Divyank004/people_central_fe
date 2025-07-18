@@ -12,10 +12,18 @@
           <q-tabs class="absolute-center">
             <q-route-tab to="/username" label="Home" />
             <q-route-tab to="/absences" label="Absences" />
+             <q-route-tab to="/calendar" label="My Calendar" />
             <q-route-tab to="/team" label="My Team" />
-            <q-route-tab to="/tasks" label="Timesheet" />
+            <!-- <q-route-tab to="/tasks" label="Timesheet" /> -->
+
           </q-tabs>
           <q-tabs class="absolute-right">
+            <q-avatar
+              size="40px"
+              class="overlapping"
+              >
+            <img :src="`https://cdn.quasar.dev/img/avatar1.jpg`">
+            </q-avatar>
             <q-tab name="help" icon="help" />
             <q-route-tab to="/" icon="logout" @click='logout'/>
           </q-tabs>
@@ -45,11 +53,9 @@ function logout() {
 .page-background {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
   position: relative;
 }
 
