@@ -1,10 +1,7 @@
 <template>
   <q-page class="row">
-    <div class="absolute-center " style="height:100%;width:90%">
-      <div class="page-header">
-                <p class="page-title">My Absences</p>
-                <p class="page-subtitle">View and manage your leave requests</p>
-      </div>
+    <div class="absolute-center" style="height:100%;width:90%">
+
       <q-scroll-area class="absences-container"
         style="height:75%;">
           <div>
@@ -96,7 +93,7 @@ const absences: absenceType[] = [
         }
 
         .section-title {
-            font-size: 1.5rem;
+            font-size: 1rem;
             color: #333;
             margin-bottom: 1.5rem;
             display: flex;
@@ -117,14 +114,14 @@ const absences: absenceType[] = [
         }
         .apply-button {
             position: fixed;
-            bottom: 91%;
-            right: 0%;
+            bottom: 102%;
+            right: 2%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 50px;
-            padding: 1rem 2rem;
-            font-size: 1rem;
+            border-radius: 10px;
+            padding: 5px 20px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);

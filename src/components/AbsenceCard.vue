@@ -48,7 +48,7 @@ const statusClass: string = statusClassMap[props.absence.status]
         .absence-item {
             background: #f8f9fa;
             border-radius: 0.75rem;
-            padding: 1.5rem;
+            padding: 1rem;
             margin-bottom: 1rem;
             border-left: 4px solid #667eea;
             transition: all 0.3s ease;
@@ -67,7 +67,7 @@ const statusClass: string = statusClassMap[props.absence.status]
         }
 
         .absence-type {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             color: #333;
         }

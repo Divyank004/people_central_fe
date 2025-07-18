@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row">
+  <q-page class="row justify-center" >
     <EmployeeComponent
       title="Employee component"
       active

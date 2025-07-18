@@ -1,11 +1,11 @@
 <template>
-    <div class="absolute-center" style="height:100%;width:90%">
+    <div>
         <div class="column items-center">
           <q-avatar
           size="100px"
           class="overlapping"
           >
-          <img :src="`https://cdn.quasar.dev/img/avatar1.jpg`">
+            <img :src="`https://cdn.quasar.dev/img/avatar1.jpg`">
           </q-avatar>
           <p class="profile-name q-ma-none">{{ employee.name }}</p>
           <p class="profile-title text-center q-mt-none ">{{ employee.role }}</p>
@@ -228,13 +228,13 @@ const vacations: Vacations[] = [
 
 
 .profile-name {
-  font-size: 2rem;
+  font-size: 1rem;
   font-weight: bold;
   color: white;
 }
 
 .profile-title {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: rgba(255, 255, 255, 0.8);
 }
 

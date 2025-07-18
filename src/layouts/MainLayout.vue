@@ -7,13 +7,13 @@
             <div class="logo">
                   <div class="logo-icon">PC</div>
                   People Central
-              </div>
+            </div>
           </q-toolbar-title>
           <q-tabs class="absolute-center">
             <q-route-tab to="/username" label="Home" />
             <q-route-tab to="/absences" label="Absences" />
             <q-route-tab to="/team" label="My Team" />
-            <q-route-tab to="/tasks" label="Tasks" />
+            <q-route-tab to="/tasks" label="Timesheet" />
           </q-tabs>
           <q-tabs class="absolute-right">
             <q-tab name="help" icon="help" />
