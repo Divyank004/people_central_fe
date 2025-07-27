@@ -1,5 +1,7 @@
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios'
+import { useRouter } from 'vue-router'
+
 
 class ApiService {
   private api: AxiosInstance
@@ -33,7 +35,15 @@ class ApiService {
 
     // Response interceptor
     this.api.interceptors.response.use(
-      (response: AxiosResponse) => {
+      async (response: AxiosResponse) => {
+        // Handle token expiration
+        if (response.status === 401) {
+          // Redirect to login page if unauthorized
+          const router = useRouter()
+          await router.replace('/login')
+          localStorage.removeItem('token')
+          console.warn('Unauthorized access - token may be invalid or expired')
+        }
         return response
       }
     )

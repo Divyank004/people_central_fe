@@ -92,10 +92,12 @@ async function handleLogin(): Promise<void>  {
   }
   isLoading.value = true;
   try {
-    await authService.login({
+    const { userId } = await authService.login({
       username: form.email,
       password: form.password
     })
+    const userProfile = await authService.getUserProfile(userId)
+    console.log('User Profile:', userProfile);
     await router.push('/username')
   } catch (error) {
     loginFailed = true

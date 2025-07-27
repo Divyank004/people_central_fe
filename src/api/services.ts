@@ -13,6 +13,16 @@ class AuthService {
       throw error
     }
   }
+
+  async getUserProfile(userId: number): Promise<User> {
+    try {
+      const response = await apiService.get<User>(`/users/${userId}`)
+      return response.data
+    } catch (error) {
+      console.error('Failed to fetch user profile:', error)
+      throw error
+    }
+  }
 }
 
 export const authService = new AuthService()
