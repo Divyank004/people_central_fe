@@ -14,7 +14,6 @@ export interface Employee {
   username: string;
   name: string;
   vacations: number;
-  year: number;
   role: string
 }
 

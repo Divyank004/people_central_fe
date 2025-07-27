@@ -1,5 +1,14 @@
 <template>
     <div>
+        <div class="text-h5 text-center q-ma-md"> Welcome Back,
+          <transition
+            appear
+            enter-active-class="animated fadeInRightBig slower delay-1s"
+            leave-active-class="animated fadeOut"
+          >
+            <span class="text-h5 text-center text-italic">{{ userStore.user?.name }}</span>
+          </transition>
+        </div>
         <div class="row justify-center ">
           <div class="dashboard-card q-ma-md column" style="width: 350px; height: 350px;">
             <div class="card-header">
@@ -9,7 +18,7 @@
               <div class="card-icon">📅</div>
             </div>
             <div class="vacation-circle">
-              {{ employee.vacations }}
+              {{ employee.noVacationDaysLeft }}
             </div>
               <p style="text-align: center; color: #666;">
                 Available Days
@@ -18,7 +27,7 @@
           <div class="dashboard-card rows q-ma-md" style="width: 350px; height: 350px;">
             <div class="row justify-between">
               <p class="card-title">
-                Leaves 2025
+                Leaves {{ new Date().getFullYear() }}
               </p>
               <div class="card-icon">🏖️</div>
             </div>
@@ -127,14 +136,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { authService } from '../api/services'
-import type { Employee, EmployeeDocument, Vacations } from '../types/employeeDashboard';
+import type { EmployeeDocument, Vacations } from '../types/employeeDashboard';
 import { onMounted } from 'vue';
 import { useUserStore } from '../stores/user'
 import type { UserProfile } from '../types/auth'
-import { useRoute } from 'vue-router'
-
-const route = useRoute()
 
 const userStore = useUserStore()
 const vacationFromDate = ref('2025/06/01')
@@ -146,38 +151,27 @@ const absenceOptions = [
 ]
 const absenceType = ref(absenceOptions[0])
 
-const employee = ref<Employee>({
-  id: 0,
+const employee = ref<UserProfile>({
+  employeeId: 0,
   userId: 0,
   orgName: '',
-  username: '',
+  userName: '',
   name: '',
-  role: '',
-  year: new Date().getFullYear(),
-  vacations: 0
+  employeeRole: '',
+  noVacationDaysLeft: 0
 })
 
 onMounted(async () => {
-  const userId = route.query.userId ? Number(route.query.userId) : 0
-  const userProfile: UserProfile = await authService.getUserProfile(userId)
-  userStore.$patch({
-    userId: userProfile.userId,
-    employeeId: userProfile.employeeId,
-    userName: userProfile.userName,
-    name: userProfile.name,
-    orgName: userProfile.orgName,
-    employeeRole: userProfile.employeeRole,
-    noVacationDaysLeft: userProfile.noVacationDaysLeft
-  })
-  employee.value.id = userStore.userId
-  employee.value.userId = userStore.userId
-  employee.value.orgName = userStore.orgName
-  employee.value.username = userStore.userName
-  employee.value.name = userStore.name
-  employee.value.role = userStore.employeeRole
-  employee.value.year = new Date().getFullYear()
-  employee.value.vacations = userStore.noVacationDaysLeft
-  console.log('Employee Data:', employee);
+  const userId = Number(localStorage.getItem('userId'));
+  if (!userId) {
+    console.error('User ID not found in localStorage');
+    userStore.logout();
+  }
+  await userStore.fetchUserData(userId)
+  if(userStore.user !== null) {
+    employee.value = userStore.user;
+    console.log('Employee Data:', employee);
+  }
 });
 
 const documents: EmployeeDocument[] = [

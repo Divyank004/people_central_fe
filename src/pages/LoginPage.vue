@@ -66,9 +66,10 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
-import { authService } from '../api/services'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/user'
 
+const userStore = useUserStore()
 const router = useRouter()
 
 interface LoginForm {
@@ -92,12 +93,11 @@ async function handleLogin(): Promise<void>  {
   }
   isLoading.value = true;
   try {
-    const { userId } = await authService.login({
+    await userStore.login({
       username: form.email,
       password: form.password
     })
-
-    await router.push({ path: '/username', query: { userId } });
+    await router.push({ path: '/username' });
   } catch (error) {
     loginFailed = true
     console.error('Login error:', error);
