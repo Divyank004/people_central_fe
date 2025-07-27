@@ -127,9 +127,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { authService } from '../api/services'
 import type { Employee, EmployeeDocument, Vacations } from '../types/employeeDashboard';
 import { onMounted } from 'vue';
 import { useUserStore } from '../stores/user'
+import type { UserProfile } from '../types/auth'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 const userStore = useUserStore()
 const vacationFromDate = ref('2025/06/01')
@@ -141,7 +146,7 @@ const absenceOptions = [
 ]
 const absenceType = ref(absenceOptions[0])
 
-const employee: Employee = {
+const employee = ref<Employee>({
   id: 0,
   userId: 0,
   orgName: '',
@@ -150,17 +155,28 @@ const employee: Employee = {
   role: '',
   year: new Date().getFullYear(),
   vacations: 0
-}
+})
 
-onMounted(() => {
-  employee.id = userStore.userId
-  employee.userId = userStore.userId
-  employee.orgName = userStore.orgName
-  employee.username = userStore.userName
-  employee.name = userStore.name
-  employee.role = userStore.employeeRole
-  employee.year = new Date().getFullYear()
-  employee.vacations = userStore.noVacationDaysLeft
+onMounted(async () => {
+  const userId = route.query.userId ? Number(route.query.userId) : 0
+  const userProfile: UserProfile = await authService.getUserProfile(userId)
+  userStore.$patch({
+    userId: userProfile.userId,
+    employeeId: userProfile.employeeId,
+    userName: userProfile.userName,
+    name: userProfile.name,
+    orgName: userProfile.orgName,
+    employeeRole: userProfile.employeeRole,
+    noVacationDaysLeft: userProfile.noVacationDaysLeft
+  })
+  employee.value.id = userStore.userId
+  employee.value.userId = userStore.userId
+  employee.value.orgName = userStore.orgName
+  employee.value.username = userStore.userName
+  employee.value.name = userStore.name
+  employee.value.role = userStore.employeeRole
+  employee.value.year = new Date().getFullYear()
+  employee.value.vacations = userStore.noVacationDaysLeft
   console.log('Employee Data:', employee);
 });
 

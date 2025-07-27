@@ -68,11 +68,8 @@
 import { ref, reactive } from 'vue';
 import { authService } from '../api/services'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '../stores/user'
-import type { UserProfile } from '../types/auth'
 
 const router = useRouter()
-const userStore = useUserStore()
 
 interface LoginForm {
   email: string
@@ -99,18 +96,8 @@ async function handleLogin(): Promise<void>  {
       username: form.email,
       password: form.password
     })
-    const userProfile: UserProfile = await authService.getUserProfile(userId)
-    console.log('User Profile:', userProfile);
-    userStore.$patch({
-      userId: userProfile.userId,
-      employeeId: userProfile.employeeId,
-      userName: userProfile.userName,
-      name: userProfile.name,
-      orgName: userProfile.orgName,
-      employeeRole: userProfile.employeeRole,
-      noVacationDaysLeft: userProfile.noVacationDaysLeft
-    })
-    await router.push('/username')
+
+    await router.push({ path: '/username', query: { userId } });
   } catch (error) {
     loginFailed = true
     console.error('Login error:', error);
