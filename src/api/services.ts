@@ -1,5 +1,5 @@
 import { apiService } from './index'
-import type { User, LoginResponse } from '../types/auth'
+import type { User, LoginResponse, UserProfile } from '../types/auth'
 
 class AuthService {
   // Login with email and password
@@ -14,9 +14,9 @@ class AuthService {
     }
   }
 
-  async getUserProfile(userId: number): Promise<User> {
+  async getUserProfile(userId: number): Promise<UserProfile> {
     try {
-      const response = await apiService.get<User>(`/users/${userId}`)
+      const response = await apiService.get<UserProfile>(`/users/${userId}`)
       return response.data
     } catch (error) {
       console.error('Failed to fetch user profile:', error)

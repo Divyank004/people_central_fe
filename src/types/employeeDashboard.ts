@@ -9,6 +9,9 @@ export interface Meta {
 
 export interface Employee {
   id: number;
+  userId: number;
+  orgName: string;
+  username: string;
   name: string;
   vacations: number;
   year: number;

@@ -121,14 +121,6 @@
               </q-list>
             </div>
           </div>
-      <!-- <q-date
-        style="width: 350px; height: 350px;"
-        color="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-        class="dashboard-card calendar q-ma-md"
-        v-model="date"
-        :events="eventsFn"
-        :event-color="(date) => date && (Number(date.charAt(8)) % 2 === 0) ? 'teal' : 'orange'"
-      /> -->
     </div>
   </div>
 </template>
@@ -136,7 +128,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Employee, EmployeeDocument, Vacations } from '../types/employeeDashboard';
+import { onMounted } from 'vue';
+import { useUserStore } from '../stores/user'
 
+const userStore = useUserStore()
 const vacationFromDate = ref('2025/06/01')
 const vacationToDate = ref('2025/06/01')
 const absenceOptions = [
@@ -145,15 +140,30 @@ const absenceOptions = [
   'Sick Leave',
 ]
 const absenceType = ref(absenceOptions[0])
+
 const employee: Employee = {
-  id: 1,
-  name: 'Divyank Dhadi',
-  role: 'Full stack software developer',
-  year: 2025,
-  vacations: 10
+  id: 0,
+  userId: 0,
+  orgName: '',
+  username: '',
+  name: '',
+  role: '',
+  year: new Date().getFullYear(),
+  vacations: 0
 }
-// const date = ref('2025/02/01')
-// const events =  [ '2019/02/01', '2019/02/05', '2019/02/06', '2019/02/09', '2019/02/23' ]
+
+onMounted(() => {
+  employee.id = userStore.userId
+  employee.userId = userStore.userId
+  employee.orgName = userStore.orgName
+  employee.username = userStore.userName
+  employee.name = userStore.name
+  employee.role = userStore.employeeRole
+  employee.year = new Date().getFullYear()
+  employee.vacations = userStore.noVacationDaysLeft
+  console.log('Employee Data:', employee);
+});
+
 const documents: EmployeeDocument[] = [
   {
     id: 1,
@@ -187,16 +197,6 @@ const vacations: Vacations[] = [
     noOfDaysTaken: 1
   }
 ]
-// function eventsFn (date: string) {
-//         if (date === '2025/02/01' ||
-//           date === '2025/02/05' ||
-//           date === '2025/02/06' ||
-//           date === '2025/02/09' ||
-//           date === '2025/02/23') {
-//           return true
-//         }
-//         return false
-//       }
 </script>
 <style scoped>
 .my-card {
