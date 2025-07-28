@@ -25,7 +25,10 @@ export const useUserStore = defineStore('user', {
         const userProfile: UserProfile  = await authService.getUserProfile(userId)
         this.user = userProfile
         this.isAuthenticated = true
-      } finally {
+      } catch(err){
+        console.log('error ogged', err)
+      }
+      finally {
         this.loading = false
       }
     },

@@ -1,11 +1,9 @@
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios'
-import { useRouter } from 'vue-router'
-
+import { navigateToLogin } from '../router/routerService';
 
 class ApiService {
   private api: AxiosInstance
-
   constructor() {
     this.api = axios.create({
       baseURL: process.env.VUE_APP_API_BASE_URL || 'http://localhost:3000',
@@ -35,17 +33,15 @@ class ApiService {
 
     // Response interceptor
     this.api.interceptors.response.use(
-      async (response: AxiosResponse) => {
-        // Handle token expiration
-        if (response.status === 401) {
-          // Redirect to login page if unauthorized
-          const router = useRouter()
-          await router.replace('/login')
+      (response: AxiosResponse) => response,
+      (error) =>{
+        console.warn('Unauthorized access - err', error)
+        if (error.response.status === 401) {
+          navigateToLogin()
           localStorage.removeItem('token')
-          console.warn('Unauthorized access - token may be invalid or expired')
-        }
-        return response
+          return error
       }
+    }
     )
   }
 
@@ -76,4 +72,3 @@ export const apiService = new ApiService()
 function reject(error: ErrorOptions): unknown {
   throw new Error('Invalid credentials', error);
 }
-

@@ -17,7 +17,7 @@
             <!-- <q-route-tab to="/tasks" label="Timesheet" /> -->
 
           </q-tabs>
-          <q-tabs class="absolute-right q-pa-none" >
+          <q-tabs class="absolute-right" >
             <q-btn-dropdown
               dropdown-icon="img:https://cdn.quasar.dev/img/avatar1.jpg"
               dense
@@ -70,7 +70,6 @@
 
       <q-page-container>
         <router-view />
-        <!-- <div class="text-subtitle1 self-end">v{{ appVersion?.replaceAll('"', '') }}</div> -->
       </q-page-container>
 
 
