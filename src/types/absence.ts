@@ -10,4 +10,9 @@ interface absenceType {
   status: AbsenceStatus;
 }
 
-export type {AbsenceStatus, absenceType}
+interface VacationsCount {
+    id: number
+    vacationType: 'PAID' | 'UNPAID' | 'SICK' | 'PENDING'
+    noOfDaysTaken: number
+}
+export type {AbsenceStatus, absenceType, VacationsCount}

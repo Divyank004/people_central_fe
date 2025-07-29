@@ -21,7 +21,7 @@
               {{ employee.noVacationDaysLeft }}
             </div>
               <p style="text-align: center; color: #666;">
-                Available Days
+                Available
               </p>
           </div>
           <div class="dashboard-card rows q-ma-md" style="width: 350px; height: 350px;">
@@ -136,10 +136,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { EmployeeDocument, Vacations } from '../types/employeeDashboard';
+import type { EmployeeDocument } from '../types/employeeDashboard';
 import { onMounted } from 'vue';
 import { useUserStore } from '../stores/user'
 import type { UserProfile } from '../types/auth'
+import { authService } from 'src/api/services';
 
 const userStore = useUserStore()
 const vacationFromDate = ref('2025/06/01')
@@ -160,6 +161,28 @@ const employee = ref<UserProfile>({
   employeeRole: '',
   noVacationDaysLeft: 0
 })
+const vacations = ref([
+  {
+    id: 1,
+    vacationType: 'Paid',
+    noOfDaysTaken: 0
+  },
+  {
+    id: 2,
+    vacationType: 'UnPaid',
+    noOfDaysTaken: 0
+  },
+  {
+    id: 3,
+    vacationType: 'Sick',
+    noOfDaysTaken: 0
+  },
+  {
+    id: 4,
+    vacationType: 'pending',
+    noOfDaysTaken: 0
+  }
+])
 
 onMounted(async () => {
   const userId = Number(localStorage.getItem('userId'));
@@ -172,6 +195,8 @@ onMounted(async () => {
     employee.value = userStore.user;
     console.log('Employee Data:', employee);
   }
+
+  vacations.value = await authService.getVacationsCount(userId)
 });
 
 const documents: EmployeeDocument[] = [
@@ -185,28 +210,6 @@ const documents: EmployeeDocument[] = [
   }
 ]
 
-const vacations: Vacations[] = [
-  {
-    id: 1,
-    vacationType: 'Paid',
-    noOfDaysTaken: 12
-  },
-  {
-    id: 2,
-    vacationType: 'UnPaid',
-    noOfDaysTaken: 0
-  },
-  {
-    id: 3,
-    vacationType: 'Sick',
-    noOfDaysTaken: 2
-  },
-  {
-    id: 4,
-    vacationType: 'pending',
-    noOfDaysTaken: 1
-  }
-]
 </script>
 <style scoped>
 .my-card {
