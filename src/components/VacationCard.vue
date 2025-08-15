@@ -1,28 +1,28 @@
 <template>
   <div class="absence-item">
     <div class="absence-header">
-        <div class="absence-type">{{props.absence.leaveType}} Leave</div>
+        <div class="absence-type">{{props.vacation.vacationType}} Leave</div>
         <div :class="`${statusClass} status-badge`">
-          {{props.absence.status}}
+          {{props.vacation.status}}
         </div>
     </div>
     <div class="absence-details">
         <div class="detail-item">
             <div class="detail-label">From Date</div>
-            <div class="detail-value">{{props.absence.fromDate}}</div>
+            <div class="detail-value">{{props.vacation.fromDate}}</div>
         </div>
         <div class="detail-item">
             <div class="detail-label">To Date</div>
-            <div class="detail-value">{{props.absence.toDate}}</div>
+            <div class="detail-value">{{props.vacation.toDate}}</div>
         </div>
         <div class="detail-item">
             <div class="detail-label">Duration</div>
-            <div class="detail-value">{{props.absence.duration}}</div>
+            <div class="detail-value">{{props.vacation.duration}}</div>
         </div>
         <div class="detail-item">
             <div class="detail-label">Document</div>
             <div class="detail-value">
-                <a href="#" class="document-link">{{props.absence.document}}</a>
+                <a href="#" class="document-link">{{props.vacation.document}}</a>
             </div>
         </div>
     </div>
@@ -30,17 +30,17 @@
 </template>
 
 <script setup lang="ts">
-import type { absenceType, AbsenceStatus  } from '../types/absence'
+import type { Vacation, VacationStatus  } from '../types/vacation'
 
-const props = defineProps<({absence: absenceType})>()
+const props = defineProps<({vacation: Vacation})>()
 
-const statusClassMap: Record<AbsenceStatus, string> = {
-  Approved: 'status-approved',
-  Rejected: 'status-rejected',
-  Pending: 'status-pending'
+const statusClassMap: Record<VacationStatus, string> = {
+  'APPROVED': 'status-approved',
+  'REJECTED': 'status-rejected',
+  'PENDING': 'status-pending'
 };
 
-const statusClass: string = statusClassMap[props.absence.status]
+const statusClass: string = statusClassMap[props.vacation.status]
 </script>
 
 <style scoped>

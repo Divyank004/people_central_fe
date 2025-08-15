@@ -1,6 +1,6 @@
 import { apiService } from './index'
 import type { User, LoginResponse, UserProfile } from '../types/auth'
-import type { VacationsCount } from 'src/types/absence'
+import type { VacationsCount } from 'src/types/vacation'
 
 class AuthService {
   // Login with email and password

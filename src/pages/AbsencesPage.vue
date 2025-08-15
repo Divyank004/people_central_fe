@@ -9,10 +9,10 @@
                       <span class="section-icon">📋</span>
                       Leave History
                   </p>
-                  <div v-for="absence in absences" :key="absence.id">
-                    <AbsenceCard :absence="absence">
+                  <div v-for="vacation in vacations" :key="vacation.id">
+                    <VacationCard :vacation="vacation">
 
-                    </AbsenceCard>
+                    </VacationCard>
                   </div>
 
           </div>
@@ -67,21 +67,21 @@
 </template>
 
 <script setup lang="ts">
-import AbsenceCard from 'src/components/AbsenceCard.vue'
-import type { absenceType } from '../types/absence'
+import VacationCard from 'src/components/VacationCard.vue'
+import type { Vacation } from '../types/vacation.ts'
 import { ref } from 'vue';
 
 const showLeaveModal = ref(false);
 
-const absences: absenceType[] = [
+const vacations: Vacation[] = [
 {
     id: 1,
     fromDate: 'March 15, 2025',
     toDate: 'March 22, 2025',
     document: 'vacation_request.pdf',
     duration: '3d',
-    leaveType: 'Paid',
-    status: 'Approved'
+    vacationType: 'PAID',
+    status: 'APPROVED'
   },
   {
     id: 2,
@@ -89,8 +89,8 @@ const absences: absenceType[] = [
     toDate: 'July 10, 2025',
     document: 'medical_certificate.pdf',
     duration: '3d',
-    leaveType: 'Sick',
-    status: 'Pending',
+    vacationType: 'SICK',
+    status: 'PENDING',
   },
   {
     id: 3,
@@ -98,8 +98,8 @@ const absences: absenceType[] = [
     toDate: 'June 30, 2025',
     document: 'extended_leave_request.pdf',
     duration: '30d',
-    leaveType: 'Unpaid',
-    status: 'Rejected',
+    vacationType: 'UNPAID',
+    status: 'REJECTED',
   },
   {
     id: 4,
@@ -107,8 +107,8 @@ const absences: absenceType[] = [
     toDate: 'April 10, 2025',
     document: 'maternity_certificate.pdf',
     duration: '90d',
-    leaveType: 'Maternity',
-    status: 'Approved',
+    vacationType: 'MATERNITY',
+    status: 'APPROVED',
   },
 ]
 

@@ -1,5 +1,4 @@
 
-// src/services/routerService.js
 let routerInstance: { replace: (arg0: string) => void; } | null = null;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
