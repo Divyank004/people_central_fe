@@ -101,7 +101,7 @@
                   <template v-slot:append>
                     <q-icon name="event" class="cursor-pointer">
                       <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                        <q-date v-model="vacationToDate">
+                        <q-date v-model="vacationToDate" @update:model-value="checkFromDate">
                           <div class="row items-center justify-end">
                             <q-btn v-close-popup label="Close" color="primary" flat />
                           </div>
@@ -111,9 +111,10 @@
                   </template>
                 </q-input>
               </div>
+              <div v-if="singleDayVacation"><q-checkbox v-model="halfDay" label="Half day" color="teal" /></div>
               </div>
             </div>
-            <q-btn class="apply-btn" label="Apply" />
+            <q-btn class="apply-btn" label="Quick Apply" @click="showVacationReqDialog"/>
           </div>
             <div class="dashboard-card column  q-ma-md" style="width: 350px; height: 350px;">
           <div class="row justify-between">
@@ -130,7 +131,15 @@
               </q-list>
             </div>
           </div>
-    </div>
+        </div>
+        <ConfirmDialog
+          dialogHeader="Confirm Leave Request"
+          :dialogMessage="`Are you sure you want to apply for leave during the period
+          ${new Date(vacationFromDate).toDateString()} to ${new Date(vacationToDate).toDateString()} ?`"
+          :showConfirmDialog="showConfirmDialog"
+          v-on:close-modal="closeConfirmDialog"
+          v-on:confirm-req="quickApplyVacation">
+        </ConfirmDialog>
   </div>
 </template>
 
@@ -141,17 +150,23 @@ import { onMounted } from 'vue';
 import { useUserStore } from '../stores/user'
 import type { UserProfile } from '../types/auth'
 import { authService } from 'src/api/services';
+import { date } from 'quasar'
+import ConfirmDialog from './ConfirmDialog.vue'
+import type { VacationType } from 'src/types/vacation';
+
 
 const userStore = useUserStore()
-const vacationFromDate = ref('2025/06/01')
-const vacationToDate = ref('2025/06/01')
+const vacationFromDate = ref(new Date().toISOString())
+const vacationToDate = ref(new Date().toISOString())
 const absenceOptions = [
-  'Paid Leave',
-  'Unpaid Leave',
-  'Sick Leave',
+  {label: 'Paid Leave', value: 'PAID'},
+  {label: 'Unpaid Leave', value: 'UNPAID' },
+  {label: 'Sick Leave', value: 'SICK'}
 ]
-const absenceType = ref(absenceOptions[0])
-
+const absenceType = ref<VacationType>(absenceOptions[0]?.value as VacationType ?? 'PAID')
+const halfDay = ref(false)
+const singleDayVacation = ref(false)
+const showConfirmDialog = ref(false)
 const employee = ref<UserProfile>({
   employeeId: 0,
   userId: 0,
@@ -209,7 +224,29 @@ const documents: EmployeeDocument[] = [
     filename: 'Keys Contract'
   }
 ]
+function checkFromDate() {
+  const diff = date.getDateDiff(vacationFromDate.value, vacationToDate.value)
+  if(diff > 0) {
+    alert('to date is less than from date')
+  }
+    if(diff == 0) {
+    singleDayVacation.value = true
 
+  }
+}
+
+function showVacationReqDialog() {
+  showConfirmDialog.value = true
+  console.log('Applying vacation from', vacationFromDate.value, 'to', vacationToDate.value, 'with type', absenceType.value, 'and half day:', halfDay.value);
+}
+
+function quickApplyVacation() {
+  showConfirmDialog.value = false
+  console.log('Applying vacation from', vacationFromDate.value, 'to', vacationToDate.value, 'with type', absenceType.value, 'and half day:', halfDay.value);
+}
+function closeConfirmDialog() {
+  showConfirmDialog.value = false
+}
 </script>
 <style scoped>
 .my-card {
