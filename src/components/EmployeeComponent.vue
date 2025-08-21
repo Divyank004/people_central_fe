@@ -142,7 +142,7 @@
     <ConfirmDialog
       dialogHeader="Confirm Leave Request"
       :dialogMessage="`Are you sure you want to apply for leave during the period
-          ${new Date(vacationFromDate).toDateString()} to ${new Date(vacationToDate).toDateString()} ?`"
+          ${formatDate(vacationFromDate)} to ${formatDate(vacationToDate)} ?`"
       :showConfirmDialog="showConfirmDialog"
       v-on:close-modal="closeConfirmDialog"
       v-on:confirm-req="quickApplyVacation"
@@ -161,7 +161,7 @@ import { authService } from 'src/api/services';
 import { date } from 'quasar';
 import ConfirmDialog from './ConfirmDialog.vue';
 import type { VacationType } from 'src/types/vacation';
-
+import { formatDate } from '../utils/dateUtils';
 const userStore = useUserStore();
 const vacationFromDate = ref(new Date().toISOString());
 const vacationToDate = ref(new Date().toISOString());
