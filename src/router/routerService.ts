@@ -1,5 +1,4 @@
-
-let routerInstance: { replace: (arg0: string) => void; } | null = null;
+let routerInstance: { replace: (arg0: string) => void } | null = null;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const setRouter = (router: any) => {

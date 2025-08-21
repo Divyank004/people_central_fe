@@ -1,6 +1,6 @@
 <template>
-   <LoginPage/>
+  <LoginPage />
 </template>
 <script setup lang="ts">
-import LoginPage from '../pages/LoginPage.vue'
+import LoginPage from '../pages/LoginPage.vue';
 </script>

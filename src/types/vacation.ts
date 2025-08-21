@@ -12,9 +12,9 @@ interface Vacation {
 
 type VacationType = 'PAID' | 'UNPAID' | 'SICK' | 'PENDING' | 'MATERNITY';
 interface VacationsCount {
-    id: number
-    vacationType: VacationType
-    noOfDaysTaken: number
+  id: number;
+  vacationType: VacationType;
+  noOfDaysTaken: number;
 }
 
 interface VacationRequest {
@@ -26,4 +26,4 @@ interface VacationRequest {
   halfDay?: boolean;
 }
 
-export type {VacationStatus, Vacation, VacationsCount, VacationType, VacationRequest}
+export type { VacationStatus, Vacation, VacationsCount, VacationType, VacationRequest };

@@ -26,10 +26,13 @@
             required
             @focus="emailFocused = true"
             @blur="emailFocused = false"
-          >
+          />
         </div>
 
-        <div class="form-group" :style="{ transform: passwordFocused ? 'scale(1.02)' : 'scale(1)' }">
+        <div
+          class="form-group"
+          :style="{ transform: passwordFocused ? 'scale(1.02)' : 'scale(1)' }"
+        >
           <label for="password">Password</label>
           <input
             type="password"
@@ -39,13 +42,13 @@
             required
             @focus="passwordFocused = true"
             @blur="passwordFocused = false"
-          >
+          />
         </div>
 
         <div class="row justify-between forgot-password">
-          <div v-if='loginFailed' class="invalid-credentials">
-          <p>Invalid Credentials</p>
-        </div>
+          <div v-if="loginFailed" class="invalid-credentials">
+            <p>Invalid Credentials</p>
+          </div>
           <a href="#" @click.prevent="handleForgotPassword">Forgot Password?</a>
         </div>
 
@@ -54,8 +57,7 @@
         </button>
       </form>
 
-      <div class="divider">
-      </div>
+      <div class="divider"></div>
 
       <div class="signup-link">
         Don't have an account? <a href="#" @click.prevent="handleSignup">Sign up</a>
@@ -66,27 +68,27 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
-import { useRouter } from 'vue-router'
-import { useUserStore } from '../stores/user'
+import { useRouter } from 'vue-router';
+import { useUserStore } from '../stores/user';
 
-const userStore = useUserStore()
-const router = useRouter()
+const userStore = useUserStore();
+const router = useRouter();
 
 interface LoginForm {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
-let loginFailed: boolean = false
+let loginFailed: boolean = false;
 const form = reactive<LoginForm>({
   email: '',
-  password: ''
-})
+  password: '',
+});
 const isLoading = ref<boolean>(false);
 const emailFocused = ref<boolean>(false);
 const passwordFocused = ref<boolean>(false);
 
-async function handleLogin(): Promise<void>  {
-  loginFailed = false
+async function handleLogin(): Promise<void> {
+  loginFailed = false;
   if (!form.email || !form.password) {
     alert('Please fill in all fields');
     return;
@@ -95,17 +97,16 @@ async function handleLogin(): Promise<void>  {
   try {
     await userStore.login({
       username: form.email,
-      password: form.password
-    })
+      password: form.password,
+    });
     await router.push({ path: '/username' });
   } catch (error) {
-    loginFailed = true
+    loginFailed = true;
     console.error('Login error:', error);
   } finally {
     isLoading.value = false;
   }
 }
-
 
 function handleForgotPassword(): void {
   console.log('Forgot password clicked');
@@ -280,7 +281,7 @@ function handleSignup(): void {
 
 .divider {
   text-align: center;
-  margin: 50px 0px ;
+  margin: 50px 0px;
   position: relative;
   color: #a0aec0;
   font-size: 14px;
@@ -380,11 +381,12 @@ function handleSignup(): void {
 }
 
 .invalid-credentials {
-  color: #DC2525;
+  color: #dc2525;
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {

@@ -14,7 +14,7 @@ export interface Employee {
   username: string;
   name: string;
   vacations: number;
-  role: string
+  role: string;
 }
 
 export interface EmployeeDocument {
