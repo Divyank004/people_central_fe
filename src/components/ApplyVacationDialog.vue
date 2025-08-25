@@ -20,12 +20,12 @@
 
         <div class="form-group">
           <label class="form-label">Start Date</label>
-          <input v-model="vacation.fromDate" type="date" class="form-input" required />
+          <input v-model="vacation.startDate" type="date" class="form-input" required />
         </div>
 
         <div class="form-group">
           <label class="form-label">End Date</label>
-          <input v-model="vacation.toDate" type="date" class="form-input" required />
+          <input v-model="vacation.endDate" type="date" class="form-input" required />
         </div>
 
         <div class="form-group">

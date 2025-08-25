@@ -11,6 +11,7 @@ interface Vacation {
 }
 
 type VacationType = 'PAID' | 'UNPAID' | 'SICK' | 'PENDING' | 'MATERNITY';
+
 interface VacationsCount {
   id: number;
   vacationType: VacationType;
@@ -18,12 +19,26 @@ interface VacationsCount {
 }
 
 interface VacationRequest {
-  fromDate: string;
-  toDate: string;
+  startDate: string;
+  endDate: string;
   document?: string;
   vacationType: VacationType;
   comments?: string;
   halfDay?: boolean;
+  replacementId?: number;
 }
 
-export type { VacationStatus, Vacation, VacationsCount, VacationType, VacationRequest };
+interface VacationReqResponse {
+  id: number;
+  vacationType?: VacationType;
+  status?: VacationStatus;
+}
+
+export type {
+  VacationStatus,
+  Vacation,
+  VacationsCount,
+  VacationType,
+  VacationRequest,
+  VacationReqResponse,
+};

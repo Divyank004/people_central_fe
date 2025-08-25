@@ -31,7 +31,7 @@
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-avatar class="leave-badge approved">
-                  {{ vacations[0]?.noOfDaysTaken }}
+                  {{ vacationsCount[0]?.noOfDaysTaken }}
                 </q-avatar>
               </q-item-section>
               <q-item-section>Approved Vacation Days</q-item-section>
@@ -39,7 +39,7 @@
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-avatar class="leave-badge approved">
-                  {{ vacations[1]?.noOfDaysTaken }}
+                  {{ vacationsCount[1]?.noOfDaysTaken }}
                 </q-avatar>
               </q-item-section>
               <q-item-section>Approved Sick Days</q-item-section>
@@ -47,7 +47,7 @@
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-avatar class="leave-badge unpaid">
-                  {{ vacations[2]?.noOfDaysTaken }}
+                  {{ vacationsCount[2]?.noOfDaysTaken }}
                 </q-avatar>
               </q-item-section>
               <q-item-section>Approved Unpaid Vacation Days</q-item-section>
@@ -55,7 +55,7 @@
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-avatar class="leave-badge pending">
-                  {{ vacations[3]?.noOfDaysTaken }}
+                  {{ vacationsCount[3]?.noOfDaysTaken }}
                 </q-avatar>
               </q-item-section>
               <q-item-section>Request waiting for approval</q-item-section>
@@ -78,14 +78,14 @@
                 style="width: 130px"
                 dense
                 filled
-                v-model="vacationFromDate"
+                v-model="vacationStartDate"
                 mask="date"
                 :rules="['date']"
               >
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date v-model="vacationFromDate">
+                      <q-date v-model="vacationStartDate">
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup label="Close" color="primary" flat />
                         </div>
@@ -101,14 +101,14 @@
                 style="width: 130px"
                 dense
                 filled
-                v-model="vacationToDate"
+                v-model="vacationEndDate"
                 mask="date"
                 :rules="['date']"
               >
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                      <q-date v-model="vacationToDate" @update:model-value="checkFromDate">
+                      <q-date v-model="vacationEndDate" @update:model-value="checkFromDate">
                         <div class="row items-center justify-end">
                           <q-btn v-close-popup label="Close" color="primary" flat />
                         </div>
@@ -142,7 +142,7 @@
     <ConfirmDialog
       dialogHeader="Confirm Leave Request"
       :dialogMessage="`Are you sure you want to apply for leave during the period
-          ${formatDate(vacationFromDate)} to ${formatDate(vacationToDate)} ?`"
+          ${formatDate(vacationStartDate)} to ${formatDate(vacationEndDate)} ?`"
       :showConfirmDialog="showConfirmDialog"
       v-on:close-modal="closeConfirmDialog"
       v-on:confirm-req="quickApplyVacation"
@@ -158,18 +158,21 @@ import { onMounted } from 'vue';
 import { useUserStore } from '../stores/user';
 import type { UserProfile } from '../types/auth';
 import { authService } from 'src/api/services';
-import { date } from 'quasar';
+import { date, useQuasar } from 'quasar';
 import ConfirmDialog from './ConfirmDialog.vue';
-import type { VacationType } from 'src/types/vacation';
+import type { VacationReqResponse, VacationType, VacationsCount } from 'src/types/vacation';
 import { formatDate } from '../utils/dateUtils';
+
+const $q = useQuasar();
 const userStore = useUserStore();
-const vacationFromDate = ref(new Date().toISOString());
-const vacationToDate = ref(new Date().toISOString());
+const vacationStartDate = ref(new Date().toISOString());
+const vacationEndDate = ref(new Date().toISOString());
 const absenceOptions = [
   { label: 'Paid Leave', value: 'PAID' },
   { label: 'Unpaid Leave', value: 'UNPAID' },
   { label: 'Sick Leave', value: 'SICK' },
 ];
+const userId = Number(localStorage.getItem('userId'));
 const absenceType = ref<VacationType>((absenceOptions[0]?.value as VacationType) ?? 'PAID');
 const halfDay = ref(false);
 const singleDayVacation = ref(false);
@@ -183,43 +186,24 @@ const employee = ref<UserProfile>({
   employeeRole: '',
   noVacationDaysLeft: 0,
 });
-const vacations = ref([
-  {
-    id: 1,
-    vacationType: 'Paid',
-    noOfDaysTaken: 0,
-  },
-  {
-    id: 2,
-    vacationType: 'UnPaid',
-    noOfDaysTaken: 0,
-  },
-  {
-    id: 3,
-    vacationType: 'Sick',
-    noOfDaysTaken: 0,
-  },
-  {
-    id: 4,
-    vacationType: 'pending',
-    noOfDaysTaken: 0,
-  },
-]);
+const vacationsCount = ref<VacationsCount[]>([]);
 
 onMounted(async () => {
-  const userId = Number(localStorage.getItem('userId'));
   if (!userId) {
     console.error('User ID not found in localStorage');
     userStore.logout();
   }
+  await loadData();
+});
+
+async function loadData() {
   await userStore.fetchUserData(userId);
   if (userStore.user !== null) {
     employee.value = userStore.user;
     console.log('Employee Data:', employee);
   }
-
-  vacations.value = await authService.getVacationsCount(userId);
-});
+  vacationsCount.value = await authService.getVacationsCount(userId);
+}
 
 const documents: EmployeeDocument[] = [
   {
@@ -231,8 +215,9 @@ const documents: EmployeeDocument[] = [
     filename: 'Keys Contract',
   },
 ];
+
 function checkFromDate() {
-  const diff = date.getDateDiff(vacationFromDate.value, vacationToDate.value);
+  const diff = date.getDateDiff(vacationStartDate.value, vacationEndDate.value);
   if (diff > 0) {
     alert('to date is less than from date');
   }
@@ -243,31 +228,50 @@ function checkFromDate() {
 
 function showVacationReqDialog() {
   showConfirmDialog.value = true;
-  console.log(
-    'Applying vacation from',
-    vacationFromDate.value,
-    'to',
-    vacationToDate.value,
-    'with type',
-    absenceType.value,
-    'and half day:',
-    halfDay.value,
-  );
 }
 
-function quickApplyVacation() {
+async function quickApplyVacation() {
   showConfirmDialog.value = false;
-  console.log(
-    'Applying vacation from',
-    vacationFromDate.value,
-    'to',
-    vacationToDate.value,
-    'with type',
-    absenceType.value,
-    'and half day:',
-    halfDay.value,
-  );
+  const vacationRequestData = {
+    startDate: vacationStartDate.value,
+    endDate: vacationEndDate.value,
+    vacationType: absenceType.value,
+    halfDay: halfDay.value,
+  };
+  try {
+    const vacationReqResponse: VacationReqResponse = await authService.createVacationRequest(
+      userId,
+      vacationRequestData,
+    );
+    if (vacationReqResponse && vacationReqResponse.id) {
+      console.log('Vacation request created successfully:', vacationReqResponse);
+      $q.notify({
+        type: 'positive',
+        message: 'Vacation request created successfully!',
+        position: 'center',
+        timeout: 3000,
+      });
+      await loadData();
+    } else {
+      console.error('Failed to create vacation request');
+      $q.notify({
+        type: 'negative',
+        message: 'Failed to create vacation request. Please try again later.',
+        position: 'center',
+        timeout: 3000,
+      });
+    }
+  } catch (error) {
+    console.error('Error creating vacation request:', error);
+    $q.notify({
+      type: 'negative',
+      message: 'An error occurred while creating the vacation request. Please try again later.',
+      position: 'center',
+      timeout: 3000,
+    });
+  }
 }
+
 function closeConfirmDialog() {
   showConfirmDialog.value = false;
 }

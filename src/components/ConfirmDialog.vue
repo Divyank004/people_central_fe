@@ -88,7 +88,7 @@ watchEffect(() => {
 }
 
 .btn-primary {
-  background: #667eea;
+  background: hwb(229 29% 11%);
   color: white;
   border: none;
   padding: 0.7rem 1.5rem;

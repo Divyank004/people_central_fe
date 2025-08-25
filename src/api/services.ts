@@ -1,6 +1,6 @@
 import { apiService } from './index';
 import type { User, LoginResponse, UserProfile } from '../types/auth';
-import type { VacationsCount } from 'src/types/vacation';
+import type { VacationReqResponse, VacationRequest, VacationsCount } from 'src/types/vacation';
 
 class AuthService {
   // Login with email and password
@@ -27,10 +27,26 @@ class AuthService {
 
   async getVacationsCount(userId: number): Promise<VacationsCount[]> {
     try {
-      const response = await apiService.get<VacationsCount[]>(`/users/${userId}/vacations`);
+      const response = await apiService.get<VacationsCount[]>(`/users/${userId}/vacations/count`);
       return response.data;
     } catch (error) {
       console.error('Failed to fetch user profile:', error);
+      throw error;
+    }
+  }
+
+  async createVacationRequest(
+    userId: number,
+    vacationReqData: VacationRequest,
+  ): Promise<VacationReqResponse> {
+    try {
+      const response = await apiService.post<VacationReqResponse>(
+        `/users/${userId}/vacations`,
+        vacationReqData,
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Failed to create vacation request:', error);
       throw error;
     }
   }
