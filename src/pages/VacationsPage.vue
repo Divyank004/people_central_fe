@@ -1,18 +1,18 @@
 <template>
   <q-page class="row">
     <div class="absolute-center" style="height: 100%; width: 90%">
-      <q-scroll-area class="absences-container" style="height: 75%">
+      <q-scroll-area class="vacations-container" style="height: 75%">
         <div>
           <p class="section-title">
             <span class="section-icon">📋</span>
-            Leave History
+            Vacation History
           </p>
-          <div v-for="vacation in vacations" :key="vacation.id">
-            <VacationCard :vacation="vacation"> </VacationCard>
+          <div class="vacation-cards-container">
+            <VacationCard v-for="vacation in vacations" :key="vacation.id" :vacation="vacation" />
           </div>
         </div>
       </q-scroll-area>
-      <button class="apply-button" @click="showLeaveModal = true">Apply for Leave</button>
+      <button class="apply-button" @click="showLeaveModal = true">Apply for Vacation</button>
     </div>
     <!-- Leave Application Modal -->
     <div v-if="showLeaveModal" class="leave-modal" @click.self="showLeaveModal = false">
@@ -67,7 +67,7 @@
 
 <script setup lang="ts">
 import VacationCard from 'src/components/VacationCard.vue';
-import type { Vacation } from '../types/vacation.ts';
+import type { Vacation } from '../types/vacation.js';
 import { ref } from 'vue';
 
 const showLeaveModal = ref(false);
@@ -150,7 +150,7 @@ const submitLeaveRequest = () => {
   color: rgba(255, 255, 255, 0.8);
 }
 
-.absences-container {
+.vacations-container {
   background: rgba(150, 145, 241, 0.95);
   border-radius: 1rem;
   padding: 2rem;
@@ -176,6 +176,13 @@ const submitLeaveRequest = () => {
   justify-content: center;
   color: white;
   font-size: 0.8rem;
+}
+
+.vacation-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-start;
 }
 .apply-button {
   position: fixed;
@@ -207,13 +214,13 @@ const submitLeaveRequest = () => {
   font-weight: bold;
 }
 
-.no-absences {
+.no-vacations {
   text-align: center;
   padding: 3rem;
   color: #666;
 }
 
-.no-absences-icon {
+.no-vacations-icon {
   font-size: 3rem;
   margin-bottom: 1rem;
   opacity: 0.5;

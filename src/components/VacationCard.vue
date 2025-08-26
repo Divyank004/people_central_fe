@@ -1,5 +1,5 @@
 <template>
-  <div class="absence-item">
+  <div class="absence-item ">
     <div class="absence-header">
       <div class="absence-type">{{ props.vacation.vacationType }} Leave</div>
       <div :class="`${statusClass} status-badge`">
@@ -45,11 +45,13 @@ const statusClass: string = statusClassMap[props.vacation.status];
 
 <style scoped>
 .absence-item {
+  flex: 0 0 24%;
+  min-width: 280px;
+  height: auto;
   background: #f8f9fa;
-  border-radius: 0.75rem;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-left: 4px solid #667eea;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  border-left: 3px solid #667eea;
   transition: all 0.3s ease;
 }
 
@@ -62,19 +64,19 @@ const statusClass: string = statusClassMap[props.vacation.status];
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .absence-type {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 500;
   color: #333;
 }
 
 .status-badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 1rem;
-  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 500;
   text-transform: uppercase;
 }
@@ -95,44 +97,64 @@ const statusClass: string = statusClassMap[props.vacation.status];
 }
 
 .absence-details {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .detail-item {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
 
 .detail-label {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: #666;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .detail-value {
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: #333;
   font-weight: 500;
+  text-align: right;
+  word-break: break-word;
 }
 
 .document-link {
   color: #667eea;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 400;
+  font-size: 0.8rem;
 }
 
 .document-link:hover {
   text-decoration: underline;
 }
 
+@media (max-width: 1200px) {
+  .absence-item {
+    flex: 0 0 33.33%;
+  }
+}
+
+@media (max-width: 900px) {
+  .absence-item {
+    flex: 0 0 50%;
+  }
+}
+
 @media (max-width: 768px) {
-  .absence-details {
-    grid-template-columns: 1fr;
+  .absence-item {
+    flex: 0 0 100%;
+    min-width: 250px;
   }
 }
 </style>

@@ -11,7 +11,7 @@
           </q-toolbar-title>
           <q-tabs class="absolute-center">
             <q-route-tab to="/username" label="Home" />
-            <q-route-tab to="/absences" label="Absences" />
+            <q-route-tab to="/vacations" label="Vacations" />
             <q-route-tab to="/calendar" label="My Calendar" />
             <q-route-tab to="/team" label="My Team" />
             <!-- <q-route-tab to="/tasks" label="Timesheet" /> -->
