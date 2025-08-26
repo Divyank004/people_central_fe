@@ -20,12 +20,30 @@
 
         <div class="form-group">
           <label class="form-label">Start Date</label>
-          <input v-model="vacation.startDate" type="date" class="form-input" required />
+          <input
+            v-model="vacation.startDate"
+            type="date"
+            class="form-input"
+            required
+            :class="{ error: validationErrors.startDate }"
+          />
+          <span v-if="validationErrors.startDate" class="error-message">{{
+            validationErrors.startDate
+          }}</span>
         </div>
 
         <div class="form-group">
           <label class="form-label">End Date</label>
-          <input v-model="vacation.endDate" type="date" class="form-input" required />
+          <input
+            v-model="vacation.endDate"
+            type="date"
+            class="form-input"
+            required
+            :class="{ error: validationErrors.endDate }"
+          />
+          <span v-if="validationErrors.endDate" class="error-message">{{
+            validationErrors.endDate
+          }}</span>
         </div>
 
         <div class="form-group">
@@ -48,8 +66,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
+import { ref, reactive, watchEffect } from 'vue';
 import type { VacationRequest } from '../types/vacation';
+import { validate, sanitize, messages } from '../utils/validation';
 
 const absenceOptions = [
   { label: 'Paid Leave', value: 'PAID' },
@@ -64,13 +83,64 @@ const props = defineProps<{
 
 const vacation = props.vacationReq;
 const modal = ref(props.showLeaveModal);
+const validationErrors = reactive<Record<string, string>>({});
 
 watchEffect(() => {
   modal.value = props.showLeaveModal;
 });
 
+function validateForm(): boolean {
+  // Clear previous errors
+  Object.keys(validationErrors).forEach((key) => delete validationErrors[key]);
+
+  let isValid = true;
+
+  // Validate vacation type
+  if (!vacation.vacationType) {
+    validationErrors.vacationType = messages.required;
+    isValid = false;
+  }
+
+  // Validate start date
+  if (!validate.required(vacation.startDate)) {
+    validationErrors.startDate = messages.required;
+    isValid = false;
+  } else if (!validate.isValidDate(vacation.startDate)) {
+    validationErrors.startDate = messages.invalidDate;
+    isValid = false;
+  } else if (!validate.isFutureDate(vacation.startDate)) {
+    validationErrors.startDate = messages.pastDate;
+    isValid = false;
+  }
+
+  // Validate end date
+  if (!validate.required(vacation.endDate)) {
+    validationErrors.endDate = messages.required;
+    isValid = false;
+  } else if (!validate.isValidDate(vacation.endDate)) {
+    validationErrors.endDate = messages.invalidDate;
+    isValid = false;
+  } else if (new Date(vacation.endDate) < new Date(vacation.startDate)) {
+    validationErrors.endDate = 'End date must be after start date';
+    isValid = false;
+  }
+
+  return isValid;
+}
+
 function submitVacationRequest() {
-  console.log('vacationReq', props.vacationReq);
+  if (!validateForm()) {
+    return;
+  }
+
+  // Sanitize inputs
+  const sanitizedRequest = {
+    ...vacation,
+    comments: vacation.comments ? sanitize.input(vacation.comments) : '',
+  };
+
+  console.log('vacationReq', sanitizedRequest);
+  // TODO: Submit request to API
 }
 </script>
 <style scoped>
@@ -166,6 +236,19 @@ function submitVacationRequest() {
   padding: 0.7rem 1.5rem;
   border-radius: 0.5rem;
   cursor: pointer;
+}
+
+.error-message {
+  color: #dc2525;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.form-input.error,
+.form-select.error {
+  border-color: #dc2525;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 @media (max-width: 768px) {
   .nav-menu {
