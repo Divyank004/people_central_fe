@@ -26,7 +26,11 @@
             required
             @focus="emailFocused = true"
             @blur="emailFocused = false"
+            :class="{ error: validationErrors.email }"
           />
+          <span v-if="validationErrors.email" class="error-message">{{
+            validationErrors.email
+          }}</span>
         </div>
 
         <div
@@ -42,7 +46,11 @@
             required
             @focus="passwordFocused = true"
             @blur="passwordFocused = false"
+            :class="{ error: validationErrors.password }"
           />
+          <span v-if="validationErrors.password" class="error-message">{{
+            validationErrors.password
+          }}</span>
         </div>
 
         <div class="row justify-between forgot-password">
@@ -70,6 +78,7 @@
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../stores/user';
+import { validate, sanitize, messages } from '../utils/validation';
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -78,7 +87,7 @@ interface LoginForm {
   email: string;
   password: string;
 }
-let loginFailed: boolean = false;
+const loginFailed = ref<boolean>(false);
 const form = reactive<LoginForm>({
   email: '',
   password: '',
@@ -86,22 +95,56 @@ const form = reactive<LoginForm>({
 const isLoading = ref<boolean>(false);
 const emailFocused = ref<boolean>(false);
 const passwordFocused = ref<boolean>(false);
+const validationErrors = reactive<Record<string, string>>({});
+
+function validateForm(): boolean {
+  // Clear previous errors
+  Object.keys(validationErrors).forEach((key) => delete validationErrors[key]);
+
+  let isValid = true;
+
+  // Validate email
+  const cleanEmail = sanitize.email(form.email);
+  if (!validate.required(cleanEmail)) {
+    validationErrors.email = messages.required;
+    isValid = false;
+  } else if (!validate.email(cleanEmail)) {
+    validationErrors.email = messages.invalidEmail;
+    isValid = false;
+  }
+
+  // Validate password
+  const cleanPassword = sanitize.input(form.password);
+  if (!validate.required(cleanPassword)) {
+    validationErrors.password = messages.required;
+    isValid = false;
+  } else if (!validate.minLength(cleanPassword, 6)) {
+    validationErrors.password = messages.minLength(6);
+    isValid = false;
+  }
+
+  return isValid;
+}
 
 async function handleLogin(): Promise<void> {
-  loginFailed = false;
-  if (!form.email || !form.password) {
-    alert('Please fill in all fields');
+  loginFailed.value = false;
+
+  if (!validateForm()) {
     return;
   }
+
   isLoading.value = true;
   try {
-    await userStore.login({
-      username: form.email,
-      password: form.password,
-    });
+    // Sanitize inputs before sending
+    const sanitizedCredentials = {
+      username: sanitize.email(form.email),
+      password: sanitize.input(form.password),
+    };
+
+    await userStore.login(sanitizedCredentials);
     await router.push({ path: '/username' });
   } catch (error) {
-    loginFailed = true;
+    loginFailed.value = true;
     console.error('Login error:', error);
   } finally {
     isLoading.value = false;
@@ -382,6 +425,18 @@ function handleSignup(): void {
 
 .invalid-credentials {
   color: #dc2525;
+}
+
+.error-message {
+  color: #dc2525;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.form-group input.error {
+  border-color: #dc2525;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
 @keyframes float {
