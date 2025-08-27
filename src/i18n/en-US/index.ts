@@ -1,5 +1,4 @@
-// This is just an example,
-// so you can safely delete all default props below
+// This is just an example
 
 export default {
   failed: 'Action failed',

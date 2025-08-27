@@ -98,12 +98,10 @@ const passwordFocused = ref<boolean>(false);
 const validationErrors = reactive<Record<string, string>>({});
 
 function validateForm(): boolean {
-  // Clear previous errors
   Object.keys(validationErrors).forEach((key) => delete validationErrors[key]);
 
   let isValid = true;
 
-  // Validate email
   const cleanEmail = sanitize.email(form.email);
   if (!validate.required(cleanEmail)) {
     validationErrors.email = messages.required;
@@ -113,7 +111,6 @@ function validateForm(): boolean {
     isValid = false;
   }
 
-  // Validate password
   const cleanPassword = sanitize.input(form.password);
   if (!validate.required(cleanPassword)) {
     validationErrors.password = messages.required;
@@ -135,7 +132,6 @@ async function handleLogin(): Promise<void> {
 
   isLoading.value = true;
   try {
-    // Sanitize inputs before sending
     const sanitizedCredentials = {
       username: sanitize.email(form.email),
       password: sanitize.input(form.password),

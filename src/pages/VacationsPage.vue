@@ -14,7 +14,6 @@
       </q-scroll-area>
       <button class="apply-button" @click="showLeaveModal = true">Apply for Vacation</button>
     </div>
-    <!-- Leave Application Modal -->
     <div v-if="showLeaveModal" class="leave-modal" @click.self="showLeaveModal = false">
       <div class="modal-content">
         <div class="modal-header">
@@ -123,11 +122,9 @@ const submitLeaveRequest = () => {
     return;
   }
 
-  // Here you would typically send the request to your backend
   console.log('Leave request submitted:', leaveForm.value);
   alert('Leave request submitted successfully!');
 
-  // Reset form and close modal
   leaveForm.value = { type: '', startDate: '', endDate: '', reason: '' };
   showLeaveModal.value = false;
 };

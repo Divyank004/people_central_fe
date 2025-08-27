@@ -3,7 +3,6 @@ import type { User, LoginResponse, UserProfile } from '../types/auth';
 import type { VacationReqResponse, VacationRequest, VacationsCount } from 'src/types/vacation';
 
 class AuthService {
-  // Login with email and password
   async login(credentials: User): Promise<LoginResponse> {
     try {
       const response = await apiService.post<LoginResponse>('/auth/login', credentials);

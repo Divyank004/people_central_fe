@@ -1,5 +1,5 @@
 <template>
-  <div class="absence-item ">
+  <div class="absence-item">
     <div class="absence-header">
       <div class="absence-type">{{ props.vacation.vacationType }} Leave</div>
       <div :class="`${statusClass} status-badge`">

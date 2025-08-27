@@ -2,7 +2,6 @@ import type { RouteRecordRaw } from 'vue-router';
 
 const isUserAuthenticated = () => {
   const token = localStorage.getItem('token');
-  // check for expired token happens at every api request and redirects to login if expired
   if (token === null || token === undefined) {
     return false;
   }
@@ -19,11 +18,10 @@ const routes: RouteRecordRaw[] = [
       else next();
     },
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: '', component: () => import('pages/EmployeePage.vue') },
       { path: '/vacations', component: () => import('pages/VacationsPage.vue') },
       { path: '/team', component: () => import('pages/TeamPage.vue') },
       { path: '/calendar', component: () => import('pages/MyCalendarPage.vue') },
-      // { path: '/tasks', component: () => import('pages/TimesheetsPage.vue') },
     ],
   },
   {
