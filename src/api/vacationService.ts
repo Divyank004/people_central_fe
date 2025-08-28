@@ -1,5 +1,10 @@
 import { apiService } from './index';
-import type { Vacation, VacationReqResponse, VacationRequest, VacationsCount } from 'src/types/vacation';
+import type {
+  Vacation,
+  VacationReqResponse,
+  VacationRequest,
+  VacationsCount,
+} from 'src/types/vacation';
 
 /**
  * Retrieves number of vacation days taken by type for a specific user

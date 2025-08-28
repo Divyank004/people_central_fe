@@ -15,7 +15,10 @@
           <div v-else-if="vacations.length === 0" class="no-vacations">
             <div class="no-vacations-icon">📋</div>
             <h4>No vacation requests found</h4>
-            <p>You haven't submitted any vacation requests yet. Click "Apply for Vacation" to create your first request!</p>
+            <p>
+              You haven't submitted any vacation requests yet. Click "Apply for Vacation" to create
+              your first request!
+            </p>
           </div>
 
           <div v-else class="vacation-cards-container">
