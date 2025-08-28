@@ -1,5 +1,5 @@
 import { apiService } from './index';
-import type { VacationReqResponse, VacationRequest, VacationsCount } from 'src/types/vacation';
+import type { Vacation, VacationReqResponse, VacationRequest, VacationsCount } from 'src/types/vacation';
 
 /**
  * Retrieves number of vacation days taken by type for a specific user
@@ -87,6 +87,43 @@ export async function createVacationRequest(
     return response.data;
   } catch (error: unknown) {
     console.error('Failed to create vacation request:', error);
+    throw error;
+  }
+}
+
+/**
+ * Retrieves vacation history/requests for a specific user
+ *
+ * @param {number} userId - The unique identifier of the user
+ *
+ * @returns {Promise<Vacation[]>} Promise that resolves to an array of vacation requests
+ * @throws {Error} When user ID is invalid (null, undefined, or <= 0)
+ * @throws {Error} When user is not found or network error occurs
+ *
+ * @example
+ * ```typescript
+ * const vacations = await getVacations(123);
+ * vacations.forEach(vacation => {
+ *   console.log(`${vacation.vacationType}: ${vacation.fromDate} - ${vacation.toDate} (${vacation.status})`);
+ * });
+ * ```
+ *
+ * @description
+ * Returns all vacation requests for the user including:
+ * - APPROVED vacations (past and future)
+ * - PENDING requests awaiting approval
+ * - REJECTED requests
+ * - All vacation types (PAID, UNPAID, SICK, MATERNITY, etc.)
+ */
+export async function getVacations(userId: number): Promise<Vacation[]> {
+  if (!userId || userId <= 0) {
+    throw new Error('Invalid user ID');
+  }
+  try {
+    const response = await apiService.get<Vacation[]>(`/users/${userId}/vacations/history`);
+    return response.data;
+  } catch (error: unknown) {
+    console.error('Failed to fetch vacations:', error);
     throw error;
   }
 }

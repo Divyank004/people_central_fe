@@ -7,7 +7,18 @@
             <span class="section-icon">📋</span>
             Vacation History
           </p>
-          <div class="vacation-cards-container">
+          <div v-if="loading" class="loading-container">
+            <q-spinner-dots size="50px" color="primary" />
+            <p class="loading-text">Loading vacation history...</p>
+          </div>
+
+          <div v-else-if="vacations.length === 0" class="no-vacations">
+            <div class="no-vacations-icon">📋</div>
+            <h4>No vacation requests found</h4>
+            <p>You haven't submitted any vacation requests yet. Click "Apply for Vacation" to create your first request!</p>
+          </div>
+
+          <div v-else class="vacation-cards-container">
             <VacationCard v-for="vacation in vacations" :key="vacation.id" :vacation="vacation" />
           </div>
         </div>
@@ -67,48 +78,16 @@
 <script setup lang="ts">
 import VacationCard from 'src/components/VacationCard.vue';
 import type { Vacation } from '../types/vacation.js';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { getVacations } from '../api/vacationService';
+import { useQuasar } from 'quasar';
 
+const $q = useQuasar();
 const showLeaveModal = ref(false);
+const vacations = ref<Vacation[]>([]);
+const loading = ref(false);
 
-const vacations: Vacation[] = [
-  {
-    id: 1,
-    fromDate: 'March 15, 2025',
-    toDate: 'March 22, 2025',
-    document: 'vacation_request.pdf',
-    duration: '3d',
-    vacationType: 'PAID',
-    status: 'APPROVED',
-  },
-  {
-    id: 2,
-    fromDate: 'July 8, 2025',
-    toDate: 'July 10, 2025',
-    document: 'medical_certificate.pdf',
-    duration: '3d',
-    vacationType: 'SICK',
-    status: 'PENDING',
-  },
-  {
-    id: 3,
-    fromDate: 'June 1, 2025',
-    toDate: 'June 30, 2025',
-    document: 'extended_leave_request.pdf',
-    duration: '30d',
-    vacationType: 'UNPAID',
-    status: 'REJECTED',
-  },
-  {
-    id: 4,
-    fromDate: 'January 10, 2025',
-    toDate: 'April 10, 2025',
-    document: 'maternity_certificate.pdf',
-    duration: '90d',
-    vacationType: 'MATERNITY',
-    status: 'APPROVED',
-  },
-];
+const userId = Number(localStorage.getItem('userId'));
 
 const leaveForm = ref({
   type: '',
@@ -116,17 +95,58 @@ const leaveForm = ref({
   endDate: '',
   reason: '',
 });
-const submitLeaveRequest = () => {
+
+async function loadVacations() {
+  if (!userId) {
+    $q.notify({
+      type: 'negative',
+      message: 'User not found. Please log in again.',
+      position: 'center',
+    });
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const vacationData = await getVacations(userId);
+    vacations.value = vacationData;
+  } catch (error) {
+    console.error('Failed to load vacations:', error);
+    $q.notify({
+      type: 'negative',
+      message: 'Failed to load vacation history. Please try again.',
+      position: 'center',
+      timeout: 3000,
+    });
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(async () => {
+  await loadVacations();
+});
+
+const submitLeaveRequest = async () => {
   if (!leaveForm.value.type || !leaveForm.value.startDate || !leaveForm.value.endDate) {
-    alert('Please fill in all required fields');
+    $q.notify({
+      type: 'negative',
+      message: 'Please fill in all required fields',
+      position: 'center',
+    });
     return;
   }
 
   console.log('Leave request submitted:', leaveForm.value);
-  alert('Leave request submitted successfully!');
+  $q.notify({
+    type: 'positive',
+    message: 'Leave request submitted successfully!',
+    position: 'center',
+  });
 
   leaveForm.value = { type: '', startDate: '', endDate: '', reason: '' };
   showLeaveModal.value = false;
+  await loadVacations();
 };
 </script>
 

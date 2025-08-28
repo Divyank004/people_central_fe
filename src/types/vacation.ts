@@ -2,9 +2,10 @@ type VacationStatus = 'APPROVED' | 'PENDING' | 'REJECTED';
 
 interface Vacation {
   id: number;
-  fromDate: string;
-  toDate: string;
-  document: string;
+  startDate: string;
+  endDate: string;
+  document?: string;
+  comments?: string;
   duration: string;
   vacationType: VacationType;
   status: VacationStatus;

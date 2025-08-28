@@ -9,11 +9,11 @@
     <div class="absence-details">
       <div class="detail-item">
         <div class="detail-label">From Date</div>
-        <div class="detail-value">{{ props.vacation.fromDate }}</div>
+        <div class="detail-value">{{ formatDate(props.vacation.startDate) }}</div>
       </div>
       <div class="detail-item">
         <div class="detail-label">To Date</div>
-        <div class="detail-value">{{ props.vacation.toDate }}</div>
+        <div class="detail-value">{{ formatDate(props.vacation.endDate) }}</div>
       </div>
       <div class="detail-item">
         <div class="detail-label">Duration</div>
@@ -22,7 +22,7 @@
       <div class="detail-item">
         <div class="detail-label">Document</div>
         <div class="detail-value">
-          <a href="#" class="document-link">{{ props.vacation.document }}</a>
+          <a href="#" class="document-link">{{ props.vacation.document ?? '--' }}</a>
         </div>
       </div>
     </div>
@@ -31,6 +31,7 @@
 
 <script setup lang="ts">
 import type { Vacation, VacationStatus } from '../types/vacation';
+import { formatDate } from '../utils/dateUtils';
 
 const props = defineProps<{ vacation: Vacation }>();
 
