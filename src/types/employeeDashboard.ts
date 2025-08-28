@@ -1,13 +1,13 @@
-export interface Todo {
+interface Todo {
   id: number;
   content: string;
 }
 
-export interface Meta {
+interface Meta {
   totalCount: number;
 }
 
-export interface Employee {
+interface Employee {
   id: number;
   userId: number;
   orgName: string;
@@ -17,13 +17,15 @@ export interface Employee {
   role: string;
 }
 
-export interface EmployeeDocument {
+interface EmployeeDocument {
   id: number;
   filename: string;
 }
 
-export interface Vacations {
+interface Vacations {
   id: number;
   vacationType: string;
   noOfDaysTaken: number;
 }
+
+export type { Todo, Meta, Employee, EmployeeDocument, Vacations };

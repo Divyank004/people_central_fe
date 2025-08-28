@@ -1,9 +1,9 @@
-export interface User {
+interface User {
   username: string;
   password: string;
 }
 
-export interface UserProfile {
+interface UserProfile {
   userId: number;
   employeeId: number;
   userName: string;
@@ -13,12 +13,12 @@ export interface UserProfile {
   noVacationDaysLeft: number;
 }
 
-export interface LoginResponse {
+interface LoginResponse {
   access_token: string;
   userId: number;
 }
 
-export interface ApiError {
+interface ApiError {
   response?: {
     data?: {
       message: string;
@@ -28,3 +28,5 @@ export interface ApiError {
   };
   message: string;
 }
+
+export type { User, LoginResponse, UserProfile, ApiError };

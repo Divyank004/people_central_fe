@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
-import { authService } from '../api/services';
+import { login, getUserProfile } from '../api/authService';
 import type { UserProfile } from 'src/types/auth';
 
 export const useUserStore = defineStore('user', {
@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', {
 
   actions: {
     async login(credentials: { username: string; password: string }) {
-      const { userId, access_token } = await authService.login(credentials);
+      const { userId, access_token } = await login(credentials);
       localStorage.setItem('token', access_token);
       localStorage.setItem('userId', userId.toString());
       await this.fetchUserData(userId);
@@ -21,7 +21,7 @@ export const useUserStore = defineStore('user', {
     async fetchUserData(userId: number) {
       this.loading = true;
       try {
-        const userProfile: UserProfile = await authService.getUserProfile(userId);
+        const userProfile: UserProfile = await getUserProfile(userId);
         this.user = userProfile;
         this.isAuthenticated = true;
       } catch (err) {

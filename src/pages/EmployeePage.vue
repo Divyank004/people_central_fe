@@ -159,7 +159,7 @@ import type { EmployeeDocument } from '../types/employeeDashboard';
 import { onMounted } from 'vue';
 import { useUserStore } from '../stores/user';
 import type { UserProfile } from '../types/auth';
-import { authService } from '../api/services';
+import { getVacationsCount, createVacationRequest } from '../api/vacationService';
 import { date, useQuasar } from 'quasar';
 import ConfirmDialog from '../components/ConfirmDialog.vue';
 import type { VacationReqResponse, VacationType, VacationsCount } from '../types/vacation';
@@ -204,7 +204,7 @@ async function loadData() {
     if (userStore.user !== null) {
       employee.value = userStore.user;
     }
-    vacationsCount.value = await authService.getVacationsCount(userId);
+    vacationsCount.value = await getVacationsCount(userId);
   } catch (error) {
     console.error('Error loading data:', error);
     $q.notify({
@@ -250,7 +250,7 @@ async function quickApplyVacation() {
     halfDay: halfDay.value,
   };
   try {
-    const vacationReqResponse: VacationReqResponse = await authService.createVacationRequest(
+    const vacationReqResponse: VacationReqResponse = await createVacationRequest(
       userId,
       vacationRequestData,
     );
